@@ -9,6 +9,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const auth_middleware_1 = require("./middlewares/auth.middleware");
 const tenantRoutes_1 = __importDefault(require("./routes/tenantRoutes"));
+const error_middleware_1 = require("./middlewares/error.middleware");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
@@ -22,5 +23,5 @@ app.get("/", (req, res) => {
     res.send("This is home route.");
 });
 app.use("/tenants", (0, auth_middleware_1.authMiddleware)(["tenant"]), tenantRoutes_1.default);
-// app.use(errorHandler);
+app.use(error_middleware_1.errorHandler);
 exports.default = app;

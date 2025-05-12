@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { tenantService } from "../services/tenant.service";
+import { ApplicationError } from "../middlewares/error.middleware";
 
 export const createTenant = async (
   req: Request,
@@ -7,13 +8,6 @@ export const createTenant = async (
 ): Promise<void> => {
   try {
     const { cognitoId, name, email, phoneNumber } = req.body;
-
-    if (!cognitoId || !name || !email || !phoneNumber) {
-      res.status(400).json({
-        message: "Please provide all the required fields!",
-      });
-      return;
-    }
     const tenant = await tenantService.createTenant(
       cognitoId,
       name,
@@ -21,28 +15,19 @@ export const createTenant = async (
       phoneNumber
     );
     res.status(201).json({
-      message: "Tenant created successfully!",
       tenant,
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: `Error creating tenant: ${error.message}` });
+    console.log(error);
+    throw new ApplicationError("Server Error", 500, [
+      `Error creating tenant: ${error.message}`,
+    ]);
   }
 };
 
 export const getTenant = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("Hi there")
-    console.log(req.body);
-    if (!req?.body?.cognitoId) {
-      res.status(400).json({
-        message: "Please provide all the required fields!",
-      });
-      return;
-    }
-    const { cognitoId } = req.body;
-
+    const { cognitoId } = req.params;
     const tenant = await tenantService.getTenant(cognitoId);
     if (tenant) {
       res.json({
@@ -50,11 +35,16 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
         tenant,
       });
     } else {
-      res.status(404).json({ message: "Tenant not found" });
+      throw new ApplicationError("Validation Error", 404, [
+        "User not found with the given id",
+      ]);
     }
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: `Error retrieving tenant: ${error.message}` });
+    if (error instanceof ApplicationError) {
+      throw error;
+    }
+    throw new ApplicationError("Server Error", 500, [
+      `Error retrieving tenant: ${error.message}`,
+    ]);
   }
 };

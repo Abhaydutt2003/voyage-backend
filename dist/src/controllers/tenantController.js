@@ -11,40 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTenant = exports.createTenant = void 0;
 const tenant_service_1 = require("../services/tenant.service");
+const error_middleware_1 = require("../middlewares/error.middleware");
 const createTenant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { cognitoId, name, email, phoneNumber } = req.body;
-        if (!cognitoId || !name || !email || !phoneNumber) {
-            res.status(400).json({
-                message: "Please provide all the required fields!",
-            });
-            return;
-        }
         const tenant = yield tenant_service_1.tenantService.createTenant(cognitoId, name, email, phoneNumber);
         res.status(201).json({
-            message: "Tenant created successfully!",
             tenant,
         });
     }
     catch (error) {
-        res
-            .status(500)
-            .json({ message: `Error creating tenant: ${error.message}` });
+        console.log(error);
+        throw new error_middleware_1.ApplicationError("Server Error", 500, [
+            `Error creating tenant: ${error.message}`,
+        ]);
     }
 });
 exports.createTenant = createTenant;
 const getTenant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        console.log("Hi there");
-        console.log(req.body);
-        if (!((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.cognitoId)) {
-            res.status(400).json({
-                message: "Please provide all the required fields!",
-            });
-            return;
-        }
-        const { cognitoId } = req.body;
+        const { cognitoId } = req.params;
         const tenant = yield tenant_service_1.tenantService.getTenant(cognitoId);
         if (tenant) {
             res.json({
@@ -53,13 +39,18 @@ const getTenant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         else {
-            res.status(404).json({ message: "Tenant not found" });
+            throw new error_middleware_1.ApplicationError("Validation Error", 404, [
+                "User not found with the given id",
+            ]);
         }
     }
     catch (error) {
-        res
-            .status(500)
-            .json({ message: `Error retrieving tenant: ${error.message}` });
+        if (error instanceof error_middleware_1.ApplicationError) {
+            throw error;
+        }
+        throw new error_middleware_1.ApplicationError("Server Error", 500, [
+            `Error retrieving tenant: ${error.message}`,
+        ]);
     }
 });
 exports.getTenant = getTenant;

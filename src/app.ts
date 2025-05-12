@@ -21,6 +21,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
