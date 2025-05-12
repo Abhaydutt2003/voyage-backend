@@ -3,7 +3,7 @@ import {
   validateBody,
   validateParams,
 } from "../middlewares/validation.middleware";
-import { createTenant, getTenant } from "../controllers/tenantController";
+import { createTenant, getTenant } from "../controllers/tenant.controller";
 import { body, param } from "express-validator";
 
 const router = express.Router();
