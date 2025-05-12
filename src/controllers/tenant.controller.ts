@@ -31,7 +31,6 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
     const tenant = await tenantService.getTenant(cognitoId);
     if (tenant) {
       res.json({
-        message: "Tenant fetched successfully",
         tenant,
       });
     } else {

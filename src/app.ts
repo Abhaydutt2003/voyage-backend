@@ -3,8 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { authMiddleware } from "./middlewares/auth.middleware";
-import tenantRoutes from "./routes/tenantRoutes";
+import tenantRoutes from "./routes/tenant.routes";
 import { errorHandler } from "./middlewares/error.middleware";
+import managerRoutes from "./routes/manager.routes";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
+app.use("/managers", authMiddleware(["manager"]), managerRoutes);
 app.use(errorHandler);
 
 export default app;
