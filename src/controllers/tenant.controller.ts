@@ -14,9 +14,7 @@ export const createTenant = async (
       email,
       phoneNumber
     );
-    res.status(201).json({
-      tenant,
-    });
+    res.status(201).json(tenant);
   } catch (error: any) {
     console.log(error);
     throw new ApplicationError("Server Error", 500, [
@@ -30,9 +28,7 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
     const { cognitoId } = req.params;
     const tenant = await tenantService.getTenant(cognitoId);
     if (tenant) {
-      res.json({
-        tenant,
-      });
+      res.json(tenant);
     } else {
       throw new ApplicationError("Validation Error", 404, [
         "User not found with the given id",
@@ -44,6 +40,27 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
     }
     throw new ApplicationError("Server Error", 500, [
       `Error retrieving tenant: ${error.message}`,
+    ]);
+  }
+};
+
+export const updateTenant = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { cognitoId } = req.params;
+    const { name, email, phoneNumber } = req.body;
+    const updatedTenant = await tenantService.updateTenant(
+      cognitoId,
+      name,
+      email,
+      phoneNumber
+    );
+    res.json(updatedTenant);
+  } catch (error: any) {
+    throw new ApplicationError("Server Error", 500, [
+      `Error updating tenant: ${error.message}`,
     ]);
   }
 };

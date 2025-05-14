@@ -18,5 +18,14 @@ class ManagerService {
   async getManager(cognitoId: string) {
     return await managerRepository.getManager(cognitoId);
   }
+
+  async updateManager(
+    cognitoId: string,
+    name: string,
+    email: string,
+    phoneNumber: string
+  ) {
+    return managerRepository.updateManager(cognitoId, name, email, phoneNumber);
+  }
 }
 export const managerService = new ManagerService();
