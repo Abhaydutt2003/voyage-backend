@@ -23,6 +23,23 @@ class ManagerRepository {
       where: { cognitoId }, //manager does not have favorites
     });
   }
+
+  async updateManager(
+    cognitoId: string,
+    name: string,
+    email: string,
+    phoneNumber: string
+  ) {
+    return await prisma.manager.update({
+      where: { cognitoId },
+      data: {
+        name,
+        email,
+        phoneNumber,
+      },
+    });
+  }
+
 }
 
 export const managerRepository = new ManagerRepository(); //example of module caching

@@ -18,5 +18,14 @@ class TenantService {
   async getTenant(cognitoId: string) {
     return await tenantRepository.getTenantWithFavorites(cognitoId);
   }
+
+  async updateTenant(
+    cognitoId: string,
+    name: string,
+    email: string,
+    phoneNumber: string
+  ) {
+    return tenantRepository.updateTenant(cognitoId, name, email, phoneNumber);
+  }
 }
 export const tenantService = new TenantService();

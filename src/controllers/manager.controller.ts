@@ -14,9 +14,7 @@ export const createManager = async (
       email,
       phoneNumber
     );
-    res.status(201).json({
-      manager,
-    });
+    res.status(201).json(manager);
   } catch (error: any) {
     console.log(error);
     throw new ApplicationError("Server Error", 500, [
@@ -33,9 +31,7 @@ export const getManager = async (
     const { cognitoId } = req.params;
     const manager = await managerService.getManager(cognitoId);
     if (manager) {
-      res.json({
-        manager,
-      });
+      res.json(manager);
     } else {
       throw new ApplicationError("Validation Error", 404, [
         "User not found with the given id",
@@ -47,6 +43,27 @@ export const getManager = async (
     }
     throw new ApplicationError("Server Error", 500, [
       `Error retrieving tenant: ${error.message}`,
+    ]);
+  }
+};
+
+export const updateManager = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { cognitoId } = req.params;
+    const { name, email, phoneNumber } = req.body;
+    const updatedTenant = await managerService.updateManager(
+      cognitoId,
+      name,
+      email,
+      phoneNumber
+    );
+    res.json(updatedTenant);
+  } catch (error: any) {
+    throw new ApplicationError("Server Error", 500, [
+      `Error updating Manager: ${error.message}`,
     ]);
   }
 };

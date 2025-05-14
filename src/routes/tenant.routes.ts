@@ -3,7 +3,7 @@ import {
   validateBody,
   validateParams,
 } from "../middlewares/validation.middleware";
-import { createTenant, getTenant } from "../controllers/tenant.controller";
+import { createTenant, getTenant,updateTenant } from "../controllers/tenant.controller";
 import { body, param } from "express-validator";
 
 const router = express.Router();
@@ -24,6 +24,14 @@ router.get(
     param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
   ]),
   getTenant
+);
+
+router.put(
+  "/:cognitoId",
+  validateParams([
+    param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
+  ]),
+  updateTenant
 );
 
 export default router;

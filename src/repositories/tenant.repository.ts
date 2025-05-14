@@ -26,6 +26,23 @@ class TenantRepository {
       },
     });
   }
+
+  async updateTenant(
+    cognitoId: string,
+    name: string,
+    email: string,
+    phoneNumber: string
+  ) {
+    return await prisma.tenant.update({
+      where: { cognitoId },
+      data: {
+        name,
+        email,
+        phoneNumber,
+      },
+    });
+  }
+  
 }
 
 export const tenantRepository = new TenantRepository();

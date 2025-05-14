@@ -3,7 +3,11 @@ import {
   validateBody,
   validateParams,
 } from "../middlewares/validation.middleware";
-import { createManager, getManager } from "../controllers/manager.controller";
+import {
+  createManager,
+  getManager,
+  updateManager,
+} from "../controllers/manager.controller";
 import { body, param } from "express-validator";
 
 const router = express.Router();
@@ -25,4 +29,13 @@ router.get(
   ]),
   getManager
 );
+
+router.put(
+  "/:cognitoId",
+  validateParams([
+    param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
+  ]),
+  updateManager
+);
+
 export default router;
