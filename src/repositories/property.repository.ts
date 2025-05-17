@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "../generated/prisma/client";
+import { repoErrorHandler } from "../lib/repoErrorHandler";
 const prisma = new PrismaClient();
 
 class PropertyRepository {
@@ -7,12 +8,14 @@ class PropertyRepository {
   }
 
   async fetchProperty(id: string) {
-    return await prisma.property.findUnique({
-      where: { id: Number(id) },
-      include: {
-        location: true,
-      },
-    });
+    return repoErrorHandler(() =>
+      prisma.property.findUnique({
+        where: { id: Number(id) },
+        include: {
+          location: true,
+        },
+      })
+    );
   }
 
   async fetchPropertyCoordinates(rawSqlQuery: Prisma.Sql) {
