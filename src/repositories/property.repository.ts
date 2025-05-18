@@ -1,10 +1,10 @@
-import { Prisma, PrismaClient } from "../generated/prisma/client";
+import { Prisma } from "../generated/prisma/client";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
 
 class PropertyRepository {
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
-    return await prisma.$queryRaw(rawSqlQuery);
+    return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
   }
 
   async fetchProperty(id: string) {
@@ -18,8 +18,19 @@ class PropertyRepository {
     );
   }
 
+  async fetchPricePerMonthAndSecurityDeposit(propertyId: string) {
+    return repoErrorHandler(() =>
+      prisma.property.findUnique({
+        where: { id: Number(propertyId) },
+        select: { pricePerMonth: true, securityDeposit: true },
+      })
+    );
+  }
+
   async fetchPropertyCoordinates(rawSqlQuery: Prisma.Sql) {
-    return await prisma.$queryRaw<{ coordinates: string }[]>(rawSqlQuery);
+    return repoErrorHandler(() =>
+      prisma.$queryRaw<{ coordinates: string }[]>(rawSqlQuery)
+    );
   }
 
   async createProperty(
@@ -27,33 +38,48 @@ class PropertyRepository {
     photoUrls: (string | undefined)[],
     locationId: number
   ) {
-    return await prisma.property.create({
-      data: {
-        ...propertyData,
-        photoUrls,
-        locationId,
-        amenities:
-          typeof propertyData.amenities === "string"
-            ? propertyData.amenities.split(",")
-            : [],
-        highlights:
-          typeof propertyData.highlights === "string"
-            ? propertyData.highlights.split(",")
-            : [],
-        isPetsAllowed: propertyData.isPetsAllowed === "true",
-        isParkingIncluded: propertyData.isParkingIncluded === "true",
-        pricePerMonth: parseFloat(propertyData.pricePerMonth),
-        securityDeposit: parseFloat(propertyData.securityDeposit),
-        applicationFee: parseFloat(propertyData.applicationFee),
-        beds: parseInt(propertyData.beds),
-        baths: parseFloat(propertyData.baths),
-        squareFeet: parseInt(propertyData.squareFeet),
-      },
-      include: {
-        location: true,
-        manager: true,
-      },
-    });
+    return repoErrorHandler(() =>
+      prisma.property.create({
+        data: {
+          ...propertyData,
+          photoUrls,
+          locationId,
+          amenities:
+            typeof propertyData.amenities === "string"
+              ? propertyData.amenities.split(",")
+              : [],
+          highlights:
+            typeof propertyData.highlights === "string"
+              ? propertyData.highlights.split(",")
+              : [],
+          isPetsAllowed: propertyData.isPetsAllowed === "true",
+          isParkingIncluded: propertyData.isParkingIncluded === "true",
+          pricePerMonth: parseFloat(propertyData.pricePerMonth),
+          securityDeposit: parseFloat(propertyData.securityDeposit),
+          applicationFee: parseFloat(propertyData.applicationFee),
+          beds: parseInt(propertyData.beds),
+          baths: parseFloat(propertyData.baths),
+          squareFeet: parseInt(propertyData.squareFeet),
+        },
+        include: {
+          location: true,
+          manager: true,
+        },
+      })
+    );
+  }
+
+  async updatePropertyTenants(propertyId: number, tenantCognitoId: string) {
+    return repoErrorHandler(() =>
+      prisma.property.update({
+        where: { id: propertyId },
+        data: {
+          tenants: {
+            connect: { cognitoId: tenantCognitoId },
+          },
+        },
+      })
+    );
   }
 }
 
