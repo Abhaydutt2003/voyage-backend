@@ -7,9 +7,9 @@ export const listApplications = async (
   res: Response
 ): Promise<void> => {
   const { userId, userType } = req.query;
-  const applications = applicationService.listApplications(
-    userId as string,
-    userType as string
+  const applications = await applicationService.listApplications(
+    userId as string | undefined,
+    userType as string | undefined
   );
   res.json(applications);
 };
@@ -23,4 +23,17 @@ export const createApplication = async (
     applicationDto
   );
   res.json(newApplication);
+};
+
+export const updateApplicationStatus = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const updatedApplication = await applicationService.updateApplicationStatus(
+    Number(id),
+    status
+  );
+  res.json(updatedApplication);
 };
