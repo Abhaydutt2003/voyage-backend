@@ -7,16 +7,14 @@ export const createTenant = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { cognitoId, name, email, phoneNumber } = req.body;
     const tenant = await tenantService.createTenant(
-      cognitoId,
-      name,
-      email,
-      phoneNumber
+      req.body.cognitoId,
+      req.body.name,
+      req.body.email,
+      req.body.phoneNumber
     );
     res.status(201).json(tenant);
   } catch (error: any) {
-    console.log(error);
     throw new ApplicationError("Server Error", 500, [
       `Error creating tenant: ${error.message}`,
     ]);
@@ -63,4 +61,36 @@ export const updateTenant = async (
       `Error updating tenant: ${error.message}`,
     ]);
   }
+};
+
+export const getCurrentResidences = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { cognitoId } = req.params;
+  const residencesWithFormattedLocation =
+    await tenantService.getCurrentResidences(cognitoId);
+  res.json(residencesWithFormattedLocation);
+};
+
+export const addFavoriteProperty = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const updatedTenant = await tenantService.addFavoriteProperty(
+    req.params.cognitoId,
+    Number(req.params.propertyId)
+  );
+  res.json(updatedTenant);
+};
+
+export const removeFavoriteProperty = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const updatedTenant = await tenantService.removeFavoriteProperty(
+    req.params.cognitoId,
+    Number(req.params.propertyId)
+  );
+  res.json(updatedTenant);
 };

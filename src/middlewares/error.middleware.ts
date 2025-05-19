@@ -18,6 +18,12 @@ export class NotFoundError extends ApplicationError {
     super(message, 404);
   }
 }
+export class ConflictError extends ApplicationError {
+  constructor(message = "Resource conflict") {
+    super(message, 409);
+  }
+}
+
 export class UnprocessableEntityError extends ApplicationError {
   constructor(message = "Unprocessable Entity", errors?: string[]) {
     super(message, 422, errors);

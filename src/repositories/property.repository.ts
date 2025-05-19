@@ -81,6 +81,17 @@ class PropertyRepository {
       })
     );
   }
+
+  async findManyWithTenantId(tenantCognitoId: string) {
+    return repoErrorHandler(() =>
+      prisma.property.findMany({
+        where: { tenants: { some: { cognitoId: tenantCognitoId } } },
+        include: {
+          location: true,
+        },
+      })
+    );
+  }
 }
 
 export const propertyRepository = new PropertyRepository();
