@@ -11,7 +11,10 @@ import { prisma } from "../lib/prisma";
 import { ApplicationStatus } from "../generated/prisma/client";
 
 class ApplicationService {
-  async listApplications(userId: string, userType: string) {
+  async listApplications(
+    userId: string | undefined,
+    userType: string | undefined
+  ) {
     let whereClause = {};
     if (userType === "tenant") {
       whereClause = { tenantCognitoId: String(userId) };
@@ -21,9 +24,10 @@ class ApplicationService {
           managerCognitoId: String(userId),
         },
       };
-    } else {
+    } else if (userType !== undefined) {
       throw new UnprocessableEntityError(`userType ${userType} does not exist`);
     }
+
     const applications = await applicationRepository.findManyWithWhereClause(
       whereClause
     );
