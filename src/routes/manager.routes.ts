@@ -6,6 +6,7 @@ import {
 import {
   createManager,
   getManager,
+  getManagerProperties,
   updateManager,
 } from "../controllers/manager.controller";
 import { body, param } from "express-validator";
@@ -36,6 +37,14 @@ router.put(
     param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
   ]),
   updateManager
+);
+
+router.get(
+  "/:cognitoId/properties",
+  validateParams([
+    param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
+  ]),
+  getManagerProperties
 );
 
 export default router;

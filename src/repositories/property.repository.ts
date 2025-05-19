@@ -92,6 +92,17 @@ class PropertyRepository {
       })
     );
   }
+
+  async findManyWithManagerId(managerCognitoId: string) {
+    return repoErrorHandler(() =>
+      prisma.property.findMany({
+        where: { managerCognitoId },
+        include: {
+          location: true,
+        },
+      })
+    );
+  }
 }
 
 export const propertyRepository = new PropertyRepository();

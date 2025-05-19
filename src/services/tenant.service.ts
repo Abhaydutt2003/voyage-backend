@@ -3,7 +3,11 @@ import { tenantRepository } from "../repositories/tenant.repository";
 import { Prisma } from "../generated/prisma/client";
 import { locationRepository } from "../repositories/location.repository";
 import { wktToGeoJSON } from "@terraformer/wkt";
-import { ConflictError, NotFoundError } from "../middlewares/error.middleware";
+import {
+  ApplicationError,
+  ConflictError,
+  NotFoundError,
+} from "../middlewares/error.middleware";
 
 class TenantService {
   async createTenant(
@@ -21,7 +25,13 @@ class TenantService {
   }
 
   async getTenant(cognitoId: string) {
-    return await tenantRepository.getTenantWithFavorites(cognitoId);
+    const tenant = await tenantRepository.getTenantWithFavorites(cognitoId);
+    if (!tenant) {
+      throw new ApplicationError("Validation Error", 404, [
+        "User not found with the given id",
+      ]);
+    }
+    return tenant;
   }
 
   async updateTenant(
