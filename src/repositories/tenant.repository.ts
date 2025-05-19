@@ -1,5 +1,5 @@
-import { PrismaClient } from "../generated/prisma/client";
-const prisma = new PrismaClient();
+import { repoErrorHandler } from "../lib/repoErrorHandler";
+import { prisma } from "../lib/prisma";
 
 class TenantRepository {
   async createTenant(
@@ -8,41 +8,75 @@ class TenantRepository {
     email: string,
     phoneNumber: string
   ) {
-    await prisma.tenant.create({
-      data: {
-        cognitoId,
-        name,
-        email,
-        phoneNumber,
-      },
-    });
+    return repoErrorHandler(() =>
+      prisma.tenant.create({
+        data: {
+          cognitoId,
+          name,
+          email,
+          phoneNumber,
+        },
+      })
+    );
   }
 
   async getTenantWithFavorites(cognitoId: string) {
-    return await prisma.tenant.findUnique({
-      where: { cognitoId },
-      include: {
-        favorites: true,
-      },
-    });
+    return repoErrorHandler(() =>
+      prisma.tenant.findUnique({
+        where: { cognitoId },
+        include: {
+          favorites: true,
+        },
+      })
+    );
   }
 
   async updateTenant(
     cognitoId: string,
-    name: string,
-    email: string,
-    phoneNumber: string
+    name?: string,
+    email?: string,
+    phoneNumber?: string,
+    favoritePropertyId?: number
   ) {
-    return await prisma.tenant.update({
-      where: { cognitoId },
-      data: {
-        name,
-        email,
-        phoneNumber,
-      },
-    });
+    return repoErrorHandler(() =>
+      prisma.tenant.update({
+        where: { cognitoId },
+        data: {
+          ...(name && { name }),
+          ...(email && { email }),
+          ...(phoneNumber && { phoneNumber }),
+          ...(favoritePropertyId && {
+            favorites: {
+              connect: { id: favoritePropertyId },
+            },
+          }),
+        },
+        ...(favoritePropertyId && {
+          include: {
+            favorites: true,
+          },
+        }),
+      })
+    );
   }
-  
+
+  async removeFavoriteProperty(cognitoId: string, favoritePropertyId: number) {
+    return repoErrorHandler(() =>
+      prisma.tenant.update({
+        where: { cognitoId },
+        data: {
+          favorites: {
+            disconnect: {
+              id: favoritePropertyId,
+            },
+          },
+        },
+        include: {
+          favorites: true,
+        },
+      })
+    );
+  }
 }
 
 export const tenantRepository = new TenantRepository();

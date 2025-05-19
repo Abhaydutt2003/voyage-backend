@@ -1,9 +1,14 @@
 import { Prisma, PrismaClient, Location } from "../generated/prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
+import { repoErrorHandler } from "../lib/repoErrorHandler";
 
 class LocationRepository {
   async createLocation(rawSqlQuery: Prisma.Sql) {
-    return await prisma.$queryRaw<Location[]>(rawSqlQuery);
+    return repoErrorHandler(() => prisma.$queryRaw<Location[]>(rawSqlQuery));
+  }
+
+  async getCoordinates(rawSqlQuery: Prisma.Sql) {
+    return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
   }
 }
 
