@@ -7,6 +7,8 @@ import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
 import { locationRepository } from "../repositories/location.repository";
 import { Location } from "../generated/prisma/client";
+import GetPropertiesDto from "../dtos/property/getProperties.dto";
+import CreatePropertyDto from "../dtos/property/createPropertyDto";
 
 class PropertyService {
   private s3Client: S3Client;
@@ -16,74 +18,63 @@ class PropertyService {
       region: process.env.AWS_REGION,
     });
   }
-  //TODO make this better
-  async getProperties(
-    favoriteIds?: string,
-    priceMin?: string,
-    priceMax?: string,
-    beds?: string,
-    baths?: string,
-    propertyType?: string,
-    squareFeetMin?: string,
-    squareFeetMax?: string,
-    amenities?: string,
-    availableFrom?: string,
-    latitude?: string,
-    longitude?: string
-  ) {
+
+  #getWhereConditionsForProperties(propertyData: GetPropertiesDto) {
     let whereConditions: Prisma.Sql[] = [];
 
-    if (favoriteIds) {
-      const favoriteIdsArray = favoriteIds.split(",").map(Number);
+    if (propertyData?.favoriteIds) {
+      const favoriteIdsArray = propertyData.favoriteIds.split(",").map(Number);
       whereConditions.push(
         Prisma.sql`p.id IN (${Prisma.join(favoriteIdsArray)})`
       );
     }
 
-    if (priceMin) {
+    if (propertyData?.priceMin) {
       whereConditions.push(
-        Prisma.sql`p."pricePerMonth" >= ${Number(priceMin)}`
+        Prisma.sql`p."pricePerMonth" >= ${Number(propertyData.priceMin)}`
       );
     }
 
-    if (priceMax) {
+    if (propertyData?.priceMax) {
       whereConditions.push(
-        Prisma.sql`p."pricePerMonth" <= ${Number(priceMax)}`
+        Prisma.sql`p."pricePerMonth" <= ${Number(propertyData.priceMax)}`
       );
     }
 
-    if (beds && beds !== "any") {
-      whereConditions.push(Prisma.sql`p.beds >= ${Number(beds)}`);
+    if (propertyData?.beds && propertyData?.beds !== "any") {
+      whereConditions.push(Prisma.sql`p.beds >= ${Number(propertyData.beds)}`);
     }
 
-    if (baths && baths !== "any") {
-      whereConditions.push(Prisma.sql`p.baths >= ${Number(baths)}`);
-    }
-    if (squareFeetMin) {
+    if (propertyData?.baths && propertyData?.baths !== "any") {
       whereConditions.push(
-        Prisma.sql`p."squareFeet" >= ${Number(squareFeetMin)}`
+        Prisma.sql`p.baths >= ${Number(propertyData.baths)}`
+      );
+    }
+    if (propertyData?.squareFeetMin) {
+      whereConditions.push(
+        Prisma.sql`p."squareFeet" >= ${Number(propertyData.squareFeetMin)}`
       );
     }
 
-    if (squareFeetMax) {
+    if (propertyData?.squareFeetMax) {
       whereConditions.push(
-        Prisma.sql`p."squareFeet" <= ${Number(squareFeetMax)}`
+        Prisma.sql`p."squareFeet" <= ${Number(propertyData.squareFeetMax)}`
       );
     }
 
-    if (propertyType && propertyType !== "any") {
+    if (propertyData?.propertyType && propertyData.propertyType !== "any") {
       whereConditions.push(
-        Prisma.sql`p."propertyType" = ${propertyType}::"PropertyType"`
+        Prisma.sql`p."propertyType" = ${propertyData.propertyType}::"PropertyType"`
       );
     }
 
-    if (amenities && amenities !== "any") {
-      const amenitiesArray = amenities.split(",");
+    if (propertyData?.amenities && propertyData?.amenities !== "any") {
+      const amenitiesArray = propertyData.amenities.split(",");
       whereConditions.push(Prisma.sql`p.amenities @> ${amenitiesArray}`);
     }
 
-    if (availableFrom && availableFrom !== "any") {
-      const date = new Date(availableFrom);
+    if (propertyData?.availableFrom && propertyData?.availableFrom !== "any") {
+      const date = new Date(propertyData.availableFrom);
       if (!isNaN(date.getTime())) {
         whereConditions.push(
           Prisma.sql`EXISTS (
@@ -95,9 +86,9 @@ class PropertyService {
       }
     }
 
-    if (latitude && longitude) {
-      const lat = parseFloat(latitude);
-      const lng = parseFloat(longitude);
+    if (propertyData?.latitude && propertyData?.longitude) {
+      const lat = parseFloat(propertyData.latitude);
+      const lng = parseFloat(propertyData.longitude);
       const radiusInKilometers = 1000;
       const degrees = radiusInKilometers / 111; //convert to degrees
       whereConditions.push(
@@ -108,6 +99,11 @@ class PropertyService {
             )`
       );
     }
+    return whereConditions;
+  }
+
+  async getProperties(propertyData: GetPropertiesDto) {
+    const whereConditions = this.#getWhereConditionsForProperties(propertyData);
     const completeQuery = Prisma.sql`
       SELECT 
         p.*,
@@ -223,28 +219,20 @@ class PropertyService {
     return location;
   }
 
-  async createProperty(
-    files: Express.Multer.File[],
-    address: any,
-    city: any,
-    state: any,
-    country: any,
-    postalCode: any,
-    managerCognitoId: any,
-    propertyData: any
-  ) {
+  async createProperty(propertyData: CreatePropertyDto) {
     //upload to s3
-    const photoUrls = await this.#uploadFilesToS3(files);
+    const photoUrls = await this.#uploadFilesToS3(propertyData.files);
     //create the location obj
     const location = await this.#createLocation(
-      address,
-      city,
-      state,
-      country,
-      postalCode
+      propertyData.address,
+      propertyData.city,
+      propertyData.state,
+      propertyData.country,
+      propertyData.postalCode
     );
     const newProperty = await propertyRepository.createProperty(
       propertyData,
+      propertyData.managerCognitoId,
       photoUrls,
       location.id
     );

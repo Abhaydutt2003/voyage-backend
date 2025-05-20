@@ -35,6 +35,7 @@ class PropertyRepository {
 
   async createProperty(
     propertyData: any,
+    managerCognitoId: string,
     photoUrls: (string | undefined)[],
     locationId: number
   ) {
@@ -44,6 +45,7 @@ class PropertyRepository {
           ...propertyData,
           photoUrls,
           locationId,
+          managerCognitoId,
           amenities:
             typeof propertyData.amenities === "string"
               ? propertyData.amenities.split(",")
