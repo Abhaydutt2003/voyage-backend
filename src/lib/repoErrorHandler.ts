@@ -14,40 +14,55 @@ export const repoErrorHandler = <T>(fn: () => Promise<T>): Promise<T> => {
         case "P2001": // Record not found
         case "P2018": // Required relation record not found
         case "P2025": // Record not found in the database
-          throw new NotFoundError("The requested resource does not exist");
+          return Promise.reject(
+            new NotFoundError("The requested resource does not exist")
+          );
 
         case "P2002": // Unique constraint violation
-          throw new ValidationError([
-            `A record with this ${
-              error.meta?.target || "value"
-            } already exists`,
-          ]);
+          return Promise.reject(
+            new ValidationError([
+              `A record with this ${
+                error.meta?.target || "value"
+              } already exists`,
+            ])
+          );
 
         case "P2003": // Foreign key constraint violation
-          throw new ValidationError(["Invalid relationship reference"]);
+          return Promise.reject(
+            new ValidationError(["Invalid relationship reference"])
+          );
 
         case "P2014": // Required relation violation
-          throw new ValidationError(["Required relation missing"]);
+          return Promise.reject(
+            new ValidationError(["Required relation missing"])
+          );
 
         case "P2016": // Query interpretation error
         case "P2023": // Inconsistent database query
-          throw new ValidationError(["Invalid query parameters"]);
+        case "P2010": // Raw query failure
+          return Promise.reject(
+            new ValidationError(["Invalid query parameters"])
+          );
 
         // Add other specific error codes as needed
         default:
-          throw new ApplicationError(`Database error: ${error.code}`, 500);
+          return Promise.reject(
+            new ApplicationError(`Database error: ${error.code}`, 500)
+          );
       }
     }
 
     if (error instanceof Prisma.PrismaClientValidationError) {
-      throw new ValidationError(["Invalid data provided"]);
+      return Promise.reject(new ValidationError(["Invalid data provided"]));
     }
 
     // If it's already an ApplicationError, just rethrow it
     if (error instanceof ApplicationError) {
-      throw error;
+      return Promise.reject(error);
     }
     // For any other unexpected errors
-    throw new ApplicationError("Database operation failed", 500);
+    return Promise.reject(
+      new ApplicationError("Database operation failed", 500)
+    );
   });
 };

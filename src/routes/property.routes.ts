@@ -28,3 +28,5 @@ router.post(
   upload.array("photos"), //field in the form should be names photos, multer will add a req.files object
   createProperty
 );
+
+export default router;

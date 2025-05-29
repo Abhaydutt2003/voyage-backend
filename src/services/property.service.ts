@@ -221,7 +221,7 @@ class PropertyService {
 
   async createProperty(propertyData: CreatePropertyDto) {
     //upload to s3
-    const photoUrls = await this.#uploadFilesToS3(propertyData.files);
+    // const photoUrls = await this.#uploadFilesToS3(propertyData.files);//TODO remove this comment line after making the S3 work
     //create the location obj
     const location = await this.#createLocation(
       propertyData.address,
@@ -233,7 +233,7 @@ class PropertyService {
     const newProperty = await propertyRepository.createProperty(
       propertyData,
       propertyData.managerCognitoId,
-      photoUrls,
+      [],
       location.id
     );
     return newProperty;
