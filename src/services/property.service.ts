@@ -222,17 +222,16 @@ class PropertyService {
   async createProperty(propertyData: CreatePropertyDto) {
     //upload to s3
     // const photoUrls = await this.#uploadFilesToS3(propertyData.files);//TODO remove this comment line after making the S3 work
-    //create the location obj
+    // create the location obj
     const location = await this.#createLocation(
-      propertyData.address,
-      propertyData.city,
-      propertyData.state,
-      propertyData.country,
-      propertyData.postalCode
+      propertyData.locationData.address,
+      propertyData.locationData.city,
+      propertyData.locationData.state,
+      propertyData.locationData.country,
+      propertyData.locationData.postalCode
     );
     const newProperty = await propertyRepository.createProperty(
       propertyData,
-      propertyData.managerCognitoId,
       [],
       location.id
     );

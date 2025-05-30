@@ -1,6 +1,7 @@
 import { Prisma } from "../generated/prisma/client";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { prisma } from "../lib/prisma";
+import CreatePropertyDto from "../dtos/property/createPropertyDto";
 
 class PropertyRepository {
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
@@ -34,34 +35,16 @@ class PropertyRepository {
   }
 
   async createProperty(
-    propertyData: any,
-    managerCognitoId: string,
-    photoUrls: (string | undefined)[],
+    propertyData: CreatePropertyDto,
+    photoUrls: string[],
     locationId: number
   ) {
     return repoErrorHandler(() =>
       prisma.property.create({
         data: {
-          ...propertyData,
-          photoUrls,
+          ...propertyData.propertyData,
+          photoUrls: photoUrls,
           locationId,
-          managerCognitoId,
-          amenities:
-            typeof propertyData.amenities === "string"
-              ? propertyData.amenities.split(",")
-              : [],
-          highlights:
-            typeof propertyData.highlights === "string"
-              ? propertyData.highlights.split(",")
-              : [],
-          isPetsAllowed: propertyData.isPetsAllowed === "true",
-          isParkingIncluded: propertyData.isParkingIncluded === "true",
-          pricePerMonth: parseFloat(propertyData.pricePerMonth),
-          securityDeposit: parseFloat(propertyData.securityDeposit),
-          applicationFee: parseFloat(propertyData.applicationFee),
-          beds: parseInt(propertyData.beds),
-          baths: parseFloat(propertyData.baths),
-          squareFeet: parseInt(propertyData.squareFeet),
         },
         include: {
           location: true,
