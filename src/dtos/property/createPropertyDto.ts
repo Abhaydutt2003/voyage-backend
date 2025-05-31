@@ -33,6 +33,9 @@ class CreatePropertyDto {
   };
 
   constructor(files: Express.Multer.File[], body: any) {
+    console.log("Hello");
+    console.log(body.amenities);
+    console.log(typeof body.amenities);
     this.propertyData = {
       name: body.name,
       description: body.description,
@@ -40,9 +43,9 @@ class CreatePropertyDto {
       securityDeposit: parseFloat(body.securityDeposit),
       applicationFee: parseFloat(body.applicationFee),
       amenities:
-        typeof body.amenities === "string" ? body.amenities.split(",") : [],
+        typeof body.amenities === "string" ? JSON.parse(body.amenities) : [],
       highlights:
-        typeof body.highlights === "string" ? body.highlights.split(",") : [],
+        typeof body.highlights === "string" ? JSON.parse(body.highlights) : [],
       isPetsAllowed: body.isPetsAllowed === "true",
       isParkingIncluded: body.isParkingIncluded === "true",
       beds: parseInt(body.beds),
