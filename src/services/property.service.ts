@@ -135,7 +135,7 @@ class PropertyService {
   }
 
   async getProperty(id: string) {
-    const property = await propertyRepository.fetchProperty(id);
+    const property = await propertyRepository.findPropertyById(Number(id));
     if (property) {
       // ST_asText is a spatial function found in postgis , converts geography object to WKT
       const rawQuery = Prisma.sql`SELECT ST_asText(coordinates) as coordinates from "Location" where id = ${property.location.id}`;
@@ -285,6 +285,13 @@ class PropertyService {
       location.id
     );
     return newProperty;
+  }
+
+  async getPropertyLeases(propertyId: number) {
+    const propertyWithLeases = await propertyRepository.getPropertyLease(
+      propertyId
+    );
+    return propertyWithLeases?.leases;
   }
 }
 

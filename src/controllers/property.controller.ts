@@ -30,3 +30,13 @@ export const createProperty = asyncHandler(
     res.json(newProperty);
   }
 );
+
+export const getPropertyLeases = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const propertyWithLeases = await propertyService.getPropertyLeases(
+      Number(id)
+    );
+    res.json(propertyWithLeases);
+  }
+);

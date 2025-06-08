@@ -35,3 +35,21 @@ export const updateApplicationStatus = asyncHandler(
     res.json(updatedApplication);
   }
 );
+
+export const downloadAgreement = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const { userCognitoId, userType } = req.query;
+    const pdfBuffer = await applicationService.downloadAgreement(
+      Number(id),
+      userCognitoId as string,
+      userType as "tenant" | "manager"
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=agreement-${id}.pdf`
+    );
+    res.send(pdfBuffer);
+  }
+);

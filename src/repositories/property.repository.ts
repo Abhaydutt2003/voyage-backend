@@ -8,10 +8,10 @@ class PropertyRepository {
     return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
   }
 
-  async fetchProperty(id: string) {
+  async findPropertyById(id: number) {
     return repoErrorHandler(() =>
       prisma.property.findUnique({
-        where: { id: Number(id) },
+        where: { id },
         include: {
           location: true,
         },
@@ -84,6 +84,17 @@ class PropertyRepository {
         where: { managerCognitoId },
         include: {
           location: true,
+        },
+      })
+    );
+  }
+
+  async getPropertyLease(propertyId: number) {
+    return repoErrorHandler(() =>
+      prisma.property.findUnique({
+        where: { id: propertyId },
+        include: {
+          leases: true,
         },
       })
     );

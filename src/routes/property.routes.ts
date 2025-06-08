@@ -5,6 +5,7 @@ import {
   createProperty,
   getProperties,
   getProperty,
+  getPropertyLeases,
 } from "../controllers/property.controller";
 import { validateParams } from "../middlewares/validation.middleware";
 import { param } from "express-validator";
@@ -15,12 +16,14 @@ const upload = multer({ storage: storage }); //methods like .array() to apply mi
 const router = express.Router();
 
 router.get("/", getProperties);
+router.get("/:id", getProperty);
 router.get(
-  "/:id",
+  "/:id/leases",
+  authMiddleware(["manager"]),
   validateParams([
-    param("cognitoId").notEmpty().withMessage("Cognito ID is required"),
+    param("id").notEmpty().withMessage("Property Id is required"),
   ]),
-  getProperty
+  getPropertyLeases
 );
 router.post(
   "/",

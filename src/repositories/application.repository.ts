@@ -58,13 +58,18 @@ class ApplicationRepository {
 
   async findUniqueWithApplicationId(
     applicationId: number,
-    includeLease = false
+    includeLease = false,
+    includePropertyLocation = false
   ) {
     return repoErrorHandler(() =>
       prisma.application.findUnique({
         where: { id: applicationId },
         include: {
-          property: true,
+          property: {
+            include: {
+              ...(includePropertyLocation && { location: true }),
+            },
+          },
           tenant: true,
           ...(includeLease && { lease: true }),
         },
@@ -91,7 +96,7 @@ class ApplicationRepository {
     applicationStatus: ApplicationStatus,
     leaseId: number
   ) {
-    return () =>
+    return repoErrorHandler(() =>
       prisma.application.update({
         where: { id: applicationId },
         data: {
@@ -103,7 +108,8 @@ class ApplicationRepository {
           tenant: true,
           lease: true,
         },
-      });
+      })
+    );
   }
 }
 

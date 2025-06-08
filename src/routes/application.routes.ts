@@ -4,12 +4,14 @@ import {
   createApplication,
   updateApplicationStatus,
   listApplications,
+  downloadAgreement,
 } from "../controllers/application.controller";
 import {
   validateBody,
   validateParams,
+  validateQuery,
 } from "../middlewares/validation.middleware";
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 
 const router = express.Router();
 
@@ -43,5 +45,18 @@ router.put(
 );
 
 router.get("/", authMiddleware(["manager", "tenant"]), listApplications);
+
+router.get(
+  "/:id/agreement",
+  authMiddleware(["tenant", "manager"]),
+  validateQuery([
+    query("userCognitoId").notEmpty().withMessage("userCognitoId is required"),
+    query("userType").notEmpty().withMessage("userType is required"),
+  ]),
+  validateParams([
+    param("id").notEmpty().withMessage("id (applicationId) is required"),
+  ]),
+  downloadAgreement
+);
 
 export default router;

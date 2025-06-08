@@ -41,7 +41,7 @@ router.put(
   updateTenant
 );
 
-router.put(
+router.get(
   "/:cognitoId/current-residences",
   validateParams([
     param("cognitoId").notEmpty().withMessage("cognitoId is required"),
