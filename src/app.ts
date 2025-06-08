@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/error.middleware";
 import managerRoutes from "./routes/manager.routes";
 import leaseRoutes from "./routes/lease.routes";
 import applicationRoutes from "./routes/application.routes";
+import propertyRoutes from "./routes/property.routes";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/applications", applicationRoutes);
+app.use("/properties", propertyRoutes);
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
 app.use("/managers", authMiddleware(["manager"]), managerRoutes);
 app.use("/leases", leaseRoutes);

@@ -1,7 +1,10 @@
 import { wktToGeoJSON } from "@terraformer/wkt";
 import { Prisma } from "../generated/prisma/client";
 import { propertyRepository } from "../repositories/property.repository";
-import { ApplicationError } from "../middlewares/error.middleware";
+import {
+  ApplicationError,
+  UnprocessableEntityError,
+} from "../middlewares/error.middleware";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
@@ -132,7 +135,7 @@ class PropertyService {
   }
 
   async getProperty(id: string) {
-    const property = await propertyRepository.fetchProperty(id);
+    const property = await propertyRepository.findPropertyById(Number(id));
     if (property) {
       // ST_asText is a spatial function found in postgis , converts geography object to WKT
       const rawQuery = Prisma.sql`SELECT ST_asText(coordinates) as coordinates from "Location" where id = ${property.location.id}`;
@@ -178,14 +181,18 @@ class PropertyService {
     );
   }
 
-  async #createLocation(
+  async #getGeoCodingResponse(
     address: any,
     city: any,
-    state: any,
     country: any,
     postalCode: any
-  ): Promise<Location> {
-    const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
+  ) {
+    const requestHeaders = {
+      "User-Agent": "VoyageApp (justsomedummyemail@gmail.com)",
+    };
+
+    const searchStrategies = [
+      // Most specific: with street address
       {
         street: address,
         city,
@@ -193,13 +200,55 @@ class PropertyService {
         postalcode: postalCode,
         format: "json",
         limit: "1",
-      }
-    ).toString()}`;
-    const geocodingResponse = await axios.get(geocodingUrl, {
-      headers: {
-        "User-Agent": "VoyageApp (justsomedummyemail@gmail.com",
       },
-    });
+      // Fallback: without street address(happens when nominatim cannot recognize the street address)
+      {
+        city,
+        country,
+        postalcode: postalCode,
+        format: "json",
+        limit: "1",
+      },
+    ];
+
+    // Helper function to make geocoding request
+    const makeGeocodingRequest = async (params: Record<string, any>) => {
+      const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
+        params
+      ).toString()}`;
+      return await axios.get(url, { headers: requestHeaders });
+    };
+
+    // Try each strategy
+    for (const strategy of searchStrategies) {
+      try {
+        const response = await makeGeocodingRequest(strategy);
+
+        if (response.data && response.data.length > 0) {
+          return response;
+        }
+      } catch (error) {}
+    }
+
+    // If all strategies fail, throw error
+    throw new UnprocessableEntityError(
+      "Cannot get the coordinates for the provided address"
+    );
+  }
+
+  async #createLocation(
+    address: any,
+    city: any,
+    state: any,
+    country: any,
+    postalCode: any
+  ): Promise<Location> {
+    const geocodingResponse = await this.#getGeoCodingResponse(
+      address,
+      city,
+      country,
+      postalCode
+    );
     //get the longitude, latitude from the response
     const [longitude, latitude] =
       geocodingResponse.data[0]?.lon && geocodingResponse.data[0]?.lat
@@ -221,22 +270,28 @@ class PropertyService {
 
   async createProperty(propertyData: CreatePropertyDto) {
     //upload to s3
-    const photoUrls = await this.#uploadFilesToS3(propertyData.files);
-    //create the location obj
+    // const photoUrls = await this.#uploadFilesToS3(propertyData.files);//TODO remove this comment line after making the S3 work
+    // create the location obj
     const location = await this.#createLocation(
-      propertyData.address,
-      propertyData.city,
-      propertyData.state,
-      propertyData.country,
-      propertyData.postalCode
+      propertyData.locationData.address,
+      propertyData.locationData.city,
+      propertyData.locationData.state,
+      propertyData.locationData.country,
+      propertyData.locationData.postalCode
     );
     const newProperty = await propertyRepository.createProperty(
       propertyData,
-      propertyData.managerCognitoId,
-      photoUrls,
+      [],
       location.id
     );
     return newProperty;
+  }
+
+  async getPropertyLeases(propertyId: number) {
+    const propertyWithLeases = await propertyRepository.getPropertyLease(
+      propertyId
+    );
+    return propertyWithLeases?.leases;
   }
 }
 
