@@ -94,7 +94,11 @@ class PropertyRepository {
       prisma.property.findUnique({
         where: { id: propertyId },
         include: {
-          leases: true,
+          leases: {
+            include: {
+              tenant: true,
+            },
+          },
         },
       })
     );
