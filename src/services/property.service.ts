@@ -72,8 +72,10 @@ class PropertyService {
     }
 
     if (propertyData?.amenities && propertyData?.amenities !== "any") {
-      const amenitiesArray = propertyData.amenities.split(",");
-      whereConditions.push(Prisma.sql`p.amenities @> ${amenitiesArray}`);
+      const amenitiesArray = (propertyData.amenities as string).split(",");
+      whereConditions.push(
+        Prisma.sql`p.amenities @> ${amenitiesArray}::"Amenity"[]`
+      );
     }
 
     if (propertyData?.availableFrom && propertyData?.availableFrom !== "any") {
@@ -92,7 +94,7 @@ class PropertyService {
     if (propertyData?.latitude && propertyData?.longitude) {
       const lat = parseFloat(propertyData.latitude);
       const lng = parseFloat(propertyData.longitude);
-      const radiusInKilometers = 1000;
+      const radiusInKilometers = 200;
       const degrees = radiusInKilometers / 111; //convert to degrees
       whereConditions.push(
         Prisma.sql`ST_DWithin(
