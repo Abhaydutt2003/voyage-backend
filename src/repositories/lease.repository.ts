@@ -2,6 +2,7 @@ import { prisma } from "../lib/prisma";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { PrismaClient } from "../generated/prisma/client";
 import * as runtime from "../generated/prisma/runtime/library";
+import CreateApplicationDto from "../dtos/application/createApplication.dto";
 
 type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
@@ -36,6 +37,8 @@ class LeaseRepository {
 
   async createLeaseWithLocalPrisma(
     localPrisma: TransactionPrismaClient,
+    startDate: string,
+    endDate: string,
     pricePerMonth: number,
     securityDeposit: number,
     propertyId: number,
@@ -44,10 +47,8 @@ class LeaseRepository {
     return repoErrorHandler(() =>
       localPrisma.lease.create({
         data: {
-          startDate: new Date(),
-          endDate: new Date(
-            new Date().setFullYear(new Date().getFullYear() + 1)
-          ),
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
           rent: pricePerMonth,
           deposit: securityDeposit,
           property: {
@@ -61,23 +62,42 @@ class LeaseRepository {
     );
   }
 
-  async createLease(
-    pricePerMonth: number,
-    securityDeposit: number,
+  async getExistingLeaves(
     propertyId: number,
-    tenantCognitoId: string
+    startDate: string,
+    endDate: string
   ) {
     return repoErrorHandler(() =>
-      prisma.lease.create({
-        data: {
-          startDate: new Date(),
-          endDate: new Date(
-            new Date().setFullYear(new Date().getFullYear() + 1)
-          ),
-          rent: pricePerMonth,
-          deposit: securityDeposit,
+      prisma.lease.findMany({
+        where: {
           propertyId,
-          tenantCognitoId,
+          OR: [
+            {
+              AND: [
+                { startDate: { lte: new Date(startDate) } },
+                { endDate: { gte: new Date(endDate) } },
+              ],
+            },
+            {
+              AND: [
+                { startDate: { lte: new Date(endDate) } },
+                { endDate: { gte: new Date(endDate) } },
+              ],
+            },
+            {
+              AND: [
+                { startDate: { gte: new Date(startDate) } },
+                { endDate: { lte: new Date(endDate) } },
+              ],
+            },
+            {
+              AND: [
+                { startDate: { lte: new Date(startDate) } },
+                { endDate: { lte: new Date(endDate) } },
+                { endDate: { gte: new Date(startDate) } },
+              ],
+            },
+          ],
         },
       })
     );

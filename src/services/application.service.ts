@@ -5,6 +5,7 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
   ValidationError,
+  ConflictError,
 } from "../middlewares/error.middleware";
 import { applicationRepository } from "../repositories/application.repository";
 import { leaseRepository } from "../repositories/lease.repository";
@@ -54,6 +55,45 @@ class ApplicationService {
     return formattedApplications;
   }
 
+  private async checkLeaseOverlap(
+    propertyId: number,
+    startDate: string,
+    endDate: string
+  ) {
+    const existingLeases = await leaseRepository.getExistingLeaves(
+      propertyId,
+      startDate,
+      endDate
+    );
+
+    if (existingLeases.length > 0) {
+      throw new ConflictError(
+        "The selected dates overlap with existing leases for this property"
+      );
+    }
+  }
+
+  private async checkExistingPendingApplication(
+    propertyId: number,
+    tenantCognitoId: string,
+    startDate: string,
+    endDate: string
+  ) {
+    const existingApplication =
+      await applicationRepository.getExistingApplications(
+        propertyId,
+        tenantCognitoId,
+        startDate,
+        endDate
+      );
+
+    if (existingApplication) {
+      throw new ConflictError(
+        "You already have a pending application for this property with overlapping dates"
+      );
+    }
+  }
+
   async createApplication(applicationDto: CreateApplicationDto) {
     const property =
       await propertyRepository.fetchPricePerMonthAndSecurityDeposit(
@@ -62,9 +102,27 @@ class ApplicationService {
     if (!property) {
       throw new NotFoundError("Property not found");
     }
+
+    // Check for existing pending applications
+    await this.checkExistingPendingApplication(
+      Number(applicationDto.propertyId),
+      applicationDto.tenantCognitoId,
+      applicationDto.startDate,
+      applicationDto.endDate
+    );
+
+    // Check for lease overlaps
+    await this.checkLeaseOverlap(
+      Number(applicationDto.propertyId),
+      applicationDto.startDate,
+      applicationDto.endDate
+    );
+
     const newApplication = await prisma.$transaction(async (localPrisma) => {
       const lease = await leaseRepository.createLeaseWithLocalPrisma(
         localPrisma,
+        applicationDto.startDate,
+        applicationDto.endDate,
         property.pricePerMonth,
         property.securityDeposit,
         Number(applicationDto.propertyId),
@@ -92,21 +150,10 @@ class ApplicationService {
       throw new NotFoundError("Application not found");
     }
     if (applicationStatus == "Approved") {
-      const newLease = await leaseRepository.createLease(
-        application.property.pricePerMonth,
-        application.property.securityDeposit,
-        application.propertyId,
-        application.tenantCognitoId
-      );
       await propertyRepository.updatePropertyTenants(
         application.propertyId,
         application.tenantCognitoId
       ); //update the application with the new leaseId
-      const updated = await applicationRepository.updateLeaseId(
-        applicationId,
-        applicationStatus,
-        newLease.id
-      );
     } else {
       await applicationRepository.updateApplicationStatus(
         applicationId,

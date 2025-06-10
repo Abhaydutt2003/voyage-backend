@@ -111,6 +111,52 @@ class ApplicationRepository {
       })
     );
   }
+
+  async getExistingApplications(
+    propertyId: number,
+    tenantCognitoId: string,
+    startDate: string,
+    endDate: string
+  ) {
+    return repoErrorHandler(() =>
+      prisma.application.findFirst({
+        where: {
+          propertyId,
+          tenantCognitoId,
+          status: "Pending",
+          lease: {
+            OR: [
+              {
+                AND: [
+                  { startDate: { lte: new Date(startDate) } },
+                  { endDate: { gte: new Date(endDate) } },
+                ],
+              },
+              {
+                AND: [
+                  { startDate: { lte: new Date(endDate) } },
+                  { endDate: { gte: new Date(endDate) } },
+                ],
+              },
+              {
+                AND: [
+                  { startDate: { gte: new Date(startDate) } },
+                  { endDate: { lte: new Date(endDate) } },
+                ],
+              },
+              {
+                AND: [
+                  { startDate: { lte: new Date(startDate) } },
+                  { endDate: { lte: new Date(endDate) } },
+                  { endDate: { gte: new Date(startDate) } },
+                ],
+              },
+            ],
+          },
+        },
+      })
+    );
+  }
 }
 
 export const applicationRepository = new ApplicationRepository();

@@ -14,6 +14,11 @@ class PropertyRepository {
         where: { id },
         include: {
           location: true,
+          manager: {
+            select: {
+              phoneNumber: true,
+            },
+          },
         },
       })
     );
