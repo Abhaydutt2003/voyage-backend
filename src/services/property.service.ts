@@ -2,7 +2,6 @@ import { wktToGeoJSON } from "@terraformer/wkt";
 import { Prisma } from "../generated/prisma/client";
 import { propertyRepository } from "../repositories/property.repository";
 import {
-  ApplicationError,
   NotFoundError,
   UnprocessableEntityError,
 } from "../middlewares/error.middleware";
@@ -293,23 +292,6 @@ class PropertyService {
       propertyId
     );
     return propertyWithLeases?.leases;
-  }
-
-  async getPropertyLeasedTimes(propertyId: number) {
-    const propertyWithLeases = await propertyRepository.getPropertyLease(
-      propertyId
-    );
-    const leasedTimes = propertyWithLeases?.leases.reduce(
-      (acc, currentLease) => {
-        acc.push({
-          startDate: currentLease.startDate,
-          endDate: currentLease.endDate,
-        });
-        return acc;
-      },
-      [] as { startDate: Date; endDate: Date }[]
-    );
-    return leasedTimes;
   }
 }
 

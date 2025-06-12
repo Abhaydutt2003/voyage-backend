@@ -2,7 +2,6 @@ import { prisma } from "../lib/prisma";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { PrismaClient } from "../generated/prisma/client";
 import * as runtime from "../generated/prisma/runtime/library";
-import CreateApplicationDto from "../dtos/application/createApplication.dto";
 
 type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
@@ -62,42 +61,68 @@ class LeaseRepository {
     );
   }
 
-  async getExistingLeaves(
+  /**
+   * A overlapping lease is already approved for that period of time for some other tenant,
+   * or the tenant congnito ids match for that period of time and the lease is in pending state
+   */
+  async getOverlappingleases(
     propertyId: number,
+    tenantCognitoId: string,
     startDate: string,
     endDate: string
   ) {
+    const newStartDate = new Date(startDate);
+    const newEndDate = new Date(endDate);
     return repoErrorHandler(() =>
       prisma.lease.findMany({
         where: {
           propertyId,
-          OR: [
+          AND: [
             {
-              AND: [
-                { startDate: { lte: new Date(startDate) } },
-                { endDate: { gte: new Date(endDate) } },
-              ],
+              startDate: {
+                lte: newEndDate,
+              },
+              endDate: {
+                gte: newStartDate,
+              },
             },
             {
-              AND: [
-                { startDate: { lte: new Date(endDate) } },
-                { endDate: { gte: new Date(endDate) } },
-              ],
-            },
-            {
-              AND: [
-                { startDate: { gte: new Date(startDate) } },
-                { endDate: { lte: new Date(endDate) } },
-              ],
-            },
-            {
-              AND: [
-                { startDate: { lte: new Date(startDate) } },
-                { endDate: { lte: new Date(endDate) } },
-                { endDate: { gte: new Date(startDate) } },
+              OR: [
+                {
+                  application: {
+                    status: "Approved",
+                  },
+                },
+                {
+                  application: {
+                    status: "Pending",
+                  },
+                  tenantCognitoId,
+                },
               ],
             },
           ],
+        },
+        select: {
+          startDate: true,
+          endDate: true,
+        },
+      })
+    );
+  }
+
+  async getAccepetedLeasesTimes(propertyId: number) {
+    return repoErrorHandler(() =>
+      prisma.lease.findMany({
+        where: {
+          propertyId,
+          application: {
+            status: "Approved",
+          },
+        },
+        select: {
+          startDate: true,
+          endDate: true,
         },
       })
     );

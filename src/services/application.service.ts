@@ -55,78 +55,36 @@ class ApplicationService {
     return formattedApplications;
   }
 
-  private async checkLeaseOverlap(
-    propertyId: number,
-    startDate: string,
-    endDate: string
-  ) {
-    const existingLeases = await leaseRepository.getExistingLeaves(
-      propertyId,
-      startDate,
-      endDate
-    );
-
-    if (existingLeases.length > 0) {
-      throw new ConflictError(
-        "The selected dates overlap with existing leases for this property"
-      );
-    }
-  }
-
-  private async checkExistingPendingApplication(
-    propertyId: number,
-    tenantCognitoId: string,
-    startDate: string,
-    endDate: string
-  ) {
-    const existingApplication =
-      await applicationRepository.getExistingApplications(
-        propertyId,
-        tenantCognitoId,
-        startDate,
-        endDate
-      );
-
-    if (existingApplication) {
-      throw new ConflictError(
-        "You already have a pending application for this property with overlapping dates"
-      );
-    }
-  }
-
   async createApplication(applicationDto: CreateApplicationDto) {
+    const { propertyId, startDate, tenantCognitoId, endDate } = applicationDto;
     const property =
-      await propertyRepository.fetchPricePerMonthAndSecurityDeposit(
-        applicationDto.propertyId
-      );
+      await propertyRepository.fetchPricePerMonthAndSecurityDeposit(propertyId);
     if (!property) {
       throw new NotFoundError("Property not found");
     }
 
-    // Check for existing pending applications
-    await this.checkExistingPendingApplication(
-      Number(applicationDto.propertyId),
-      applicationDto.tenantCognitoId,
-      applicationDto.startDate,
-      applicationDto.endDate
+    const overlappingLeases = await leaseRepository.getOverlappingleases(
+      Number(propertyId),
+      tenantCognitoId,
+      startDate,
+      endDate
     );
 
-    // Check for lease overlaps
-    await this.checkLeaseOverlap(
-      Number(applicationDto.propertyId),
-      applicationDto.startDate,
-      applicationDto.endDate
-    );
+    if (overlappingLeases && overlappingLeases.length > 0) {
+      throw new ConflictError(
+        "These dates overlap with an existing lease or a pending application you've already submitted."
+      );
+    }
 
     const newApplication = await prisma.$transaction(async (localPrisma) => {
       const lease = await leaseRepository.createLeaseWithLocalPrisma(
         localPrisma,
-        applicationDto.startDate,
-        applicationDto.endDate,
+        startDate,
+        endDate,
         property.pricePerMonth,
         property.securityDeposit,
-        Number(applicationDto.propertyId),
-        applicationDto.tenantCognitoId
+        Number(propertyId),
+        tenantCognitoId
       );
       const application =
         await applicationRepository.createApplicationWithLocalPrisma(
