@@ -90,27 +90,6 @@ class ApplicationRepository {
       })
     );
   }
-
-  async updateLeaseId(
-    applicationId: number,
-    applicationStatus: ApplicationStatus,
-    leaseId: number
-  ) {
-    return repoErrorHandler(() =>
-      prisma.application.update({
-        where: { id: applicationId },
-        data: {
-          status: applicationStatus,
-          leaseId,
-        },
-        include: {
-          property: true,
-          tenant: true,
-          lease: true,
-        },
-      })
-    );
-  }
 }
 
 export const applicationRepository = new ApplicationRepository();

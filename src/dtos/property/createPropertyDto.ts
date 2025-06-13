@@ -33,9 +33,6 @@ class CreatePropertyDto {
   };
 
   constructor(files: Express.Multer.File[], body: any) {
-    console.log("Hello");
-    console.log(body.amenities);
-    console.log(typeof body.amenities);
     this.propertyData = {
       name: body.name,
       description: body.description,

@@ -5,6 +5,7 @@ import {
   UnauthorizedError,
   UnprocessableEntityError,
   ValidationError,
+  ConflictError,
 } from "../middlewares/error.middleware";
 import { applicationRepository } from "../repositories/application.repository";
 import { leaseRepository } from "../repositories/lease.repository";
@@ -55,20 +56,35 @@ class ApplicationService {
   }
 
   async createApplication(applicationDto: CreateApplicationDto) {
+    const { propertyId, startDate, tenantCognitoId, endDate } = applicationDto;
     const property =
-      await propertyRepository.fetchPricePerMonthAndSecurityDeposit(
-        applicationDto.propertyId
-      );
+      await propertyRepository.fetchPricePerMonthAndSecurityDeposit(propertyId);
     if (!property) {
       throw new NotFoundError("Property not found");
     }
+
+    const overlappingLeases = await leaseRepository.getOverlappingleases(
+      Number(propertyId),
+      tenantCognitoId,
+      startDate,
+      endDate
+    );
+
+    if (overlappingLeases && overlappingLeases.length > 0) {
+      throw new ConflictError(
+        "These dates overlap with an existing lease or a pending application you've already submitted."
+      );
+    }
+
     const newApplication = await prisma.$transaction(async (localPrisma) => {
       const lease = await leaseRepository.createLeaseWithLocalPrisma(
         localPrisma,
+        startDate,
+        endDate,
         property.pricePerMonth,
         property.securityDeposit,
-        Number(applicationDto.propertyId),
-        applicationDto.tenantCognitoId
+        Number(propertyId),
+        tenantCognitoId
       );
       const application =
         await applicationRepository.createApplicationWithLocalPrisma(
@@ -92,27 +108,16 @@ class ApplicationService {
       throw new NotFoundError("Application not found");
     }
     if (applicationStatus == "Approved") {
-      const newLease = await leaseRepository.createLease(
-        application.property.pricePerMonth,
-        application.property.securityDeposit,
-        application.propertyId,
-        application.tenantCognitoId
-      );
       await propertyRepository.updatePropertyTenants(
         application.propertyId,
         application.tenantCognitoId
       ); //update the application with the new leaseId
-      const updated = await applicationRepository.updateLeaseId(
-        applicationId,
-        applicationStatus,
-        newLease.id
-      );
-    } else {
-      await applicationRepository.updateApplicationStatus(
-        applicationId,
-        applicationStatus
-      );
     }
+
+    await applicationRepository.updateApplicationStatus(
+      applicationId,
+      applicationStatus
+    );
     return await applicationRepository.findUniqueWithApplicationId(
       applicationId,
       true

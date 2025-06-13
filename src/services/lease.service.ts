@@ -14,6 +14,10 @@ class LeaseService {
   async getLeasePayments(leaseId: string) {
     return await paymentRepository.findManyPaymentsWithLeaseId(leaseId);
   }
+
+  async getAccpetedLeasesTimes(propertyId: number) {
+    return await leaseRepository.getAccepetedLeasesTimes(propertyId);
+  }
 }
 
 export const leaseService = new LeaseService();

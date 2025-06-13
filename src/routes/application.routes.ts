@@ -21,7 +21,19 @@ router.post(
   validateBody([
     body("applicationDate")
       .notEmpty()
-      .withMessage("applicationDate is required"),
+      .withMessage("applicationDate is required")
+      .isISO8601()
+      .withMessage("applicationDate must be in ISO 8601 format (YYYY-MM-DD)"),
+    body("startDate")
+      .notEmpty()
+      .withMessage("startDate is required")
+      .isISO8601()
+      .withMessage("startDate must be in ISO 8601 format (YYYY-MM-DD)"),
+    body("endDate")
+      .notEmpty()
+      .withMessage("endDate is required")
+      .isISO8601()
+      .withMessage("endDate must be in ISO 8601 format (YYYY-MM-DD)"),
     body("status").notEmpty().withMessage("status is required"),
     body("propertyId").notEmpty().withMessage("propertyId is required"),
     body("tenantCognitoId")

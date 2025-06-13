@@ -2,7 +2,7 @@ import { wktToGeoJSON } from "@terraformer/wkt";
 import { Prisma } from "../generated/prisma/client";
 import { propertyRepository } from "../repositories/property.repository";
 import {
-  ApplicationError,
+  NotFoundError,
   UnprocessableEntityError,
 } from "../middlewares/error.middleware";
 import { S3Client } from "@aws-sdk/client-s3";
@@ -159,9 +159,7 @@ class PropertyService {
       };
       return propertyWithCoordinates;
     } else {
-      throw new ApplicationError("Not Found ", 404, [
-        `Property not found with id : ${id}`,
-      ]);
+      throw new NotFoundError(`Property not found with id : ${id}`);
     }
   }
 

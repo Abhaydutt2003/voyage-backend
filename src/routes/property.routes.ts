@@ -16,7 +16,9 @@ const upload = multer({ storage: storage }); //methods like .array() to apply mi
 const router = express.Router();
 
 router.get("/", getProperties);
+
 router.get("/:id", getProperty);
+
 router.get(
   "/:id/leases",
   authMiddleware(["manager"]),
@@ -25,6 +27,7 @@ router.get(
   ]),
   getPropertyLeases
 );
+
 router.post(
   "/",
   authMiddleware(["manager"]),
