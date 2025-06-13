@@ -63,7 +63,7 @@ class LeaseRepository {
 
   /**
    * A overlapping lease is already approved for that period of time for some other tenant,
-   * or the tenant congnito ids match for that period of time and the lease is in pending state
+   * or the tenant congnito ids match for that period of time and the lease is not in the denied state
    */
   async getOverlappingleases(
     propertyId: number,
@@ -95,7 +95,9 @@ class LeaseRepository {
                 },
                 {
                   application: {
-                    status: "Pending",
+                    status: {
+                      not: "Denied",
+                    },
                   },
                   tenantCognitoId,
                 },

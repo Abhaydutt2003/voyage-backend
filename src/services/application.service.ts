@@ -112,12 +112,12 @@ class ApplicationService {
         application.propertyId,
         application.tenantCognitoId
       ); //update the application with the new leaseId
-    } else {
-      await applicationRepository.updateApplicationStatus(
-        applicationId,
-        applicationStatus
-      );
     }
+
+    await applicationRepository.updateApplicationStatus(
+      applicationId,
+      applicationStatus
+    );
     return await applicationRepository.findUniqueWithApplicationId(
       applicationId,
       true
