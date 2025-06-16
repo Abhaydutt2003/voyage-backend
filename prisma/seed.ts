@@ -18,13 +18,14 @@ function toCamelCase(str: string): string {
 
 async function insertLocationData(locations: any[]) {
   for (const location of locations) {
-    const { id, country, city, state, address, postalCode, coordinates } = location;
+    const { id, country, city, state, address, postalCode, coordinates } =
+      location;
     try {
       const query = `
         INSERT INTO "Location" ("id", "country", "city", "state", "address", "postalCode", "coordinates") 
         VALUES (${id}, '${country}', '${city}', '${state}', '${address}', '${postalCode}', ST_GeomFromText('${coordinates}', 4326)::geography);
       `;
-      
+
       await prisma.$executeRawUnsafe(query);
       console.log(`Inserted location for ${city}`);
     } catch (error) {

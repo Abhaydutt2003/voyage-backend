@@ -100,6 +100,11 @@ class PropertyRepository {
         where: { id: propertyId },
         include: {
           leases: {
+            where: {
+              application: {
+                status: "Approved",
+              },
+            },
             include: {
               tenant: true,
             },
