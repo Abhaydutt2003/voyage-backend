@@ -188,17 +188,8 @@ exports.Prisma.LeaseScalarFieldEnum = {
   rent: 'rent',
   deposit: 'deposit',
   propertyId: 'propertyId',
-  tenantCognitoId: 'tenantCognitoId'
-};
-
-exports.Prisma.PaymentScalarFieldEnum = {
-  id: 'id',
-  amountDue: 'amountDue',
-  amountPaid: 'amountPaid',
-  dueDate: 'dueDate',
-  paymentDate: 'paymentDate',
-  paymentStatus: 'paymentStatus',
-  leaseId: 'leaseId'
+  tenantCognitoId: 'tenantCognitoId',
+  paymentProof: 'paymentProof'
 };
 
 exports.Prisma.SortOrder = {
@@ -264,21 +255,13 @@ exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
   Approved: 'Approved'
 };
 
-exports.PaymentStatus = exports.$Enums.PaymentStatus = {
-  Pending: 'Pending',
-  Paid: 'Paid',
-  PartiallyPaid: 'PartiallyPaid',
-  Overdue: 'Overdue'
-};
-
 exports.Prisma.ModelName = {
   Property: 'Property',
   Manager: 'Manager',
   Tenant: 'Tenant',
   Location: 'Location',
   Application: 'Application',
-  Lease: 'Lease',
-  Payment: 'Payment'
+  Lease: 'Lease'
 };
 
 /**

@@ -13,6 +13,7 @@ import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
 import { ApplicationStatus } from "../generated/prisma/client";
 import PDFDocument from "pdfkit";
+import { s3Service } from "./s3UploadService";
 
 class ApplicationService {
   async listApplications(
@@ -56,7 +57,8 @@ class ApplicationService {
   }
 
   async createApplication(applicationDto: CreateApplicationDto) {
-    const { propertyId, startDate, tenantCognitoId, endDate } = applicationDto;
+    const { propertyId, startDate, tenantCognitoId, endDate, paymentProof } =
+      applicationDto;
     const property =
       await propertyRepository.fetchPricePerMonthAndSecurityDeposit(propertyId);
     if (!property) {
@@ -77,6 +79,10 @@ class ApplicationService {
     }
 
     const newApplication = await prisma.$transaction(async (localPrisma) => {
+      // const paymentProofUrls = await s3Service.uploadFilesToS3(
+      //   paymentProof,
+      //   `paymentProof/${tenantCognitoId}/${property.id}`
+      // );
       const lease = await leaseRepository.createLeaseWithLocalPrisma(
         localPrisma,
         startDate,
@@ -84,7 +90,8 @@ class ApplicationService {
         property.pricePerMonth,
         property.securityDeposit,
         Number(propertyId),
-        tenantCognitoId
+        tenantCognitoId,
+        []
       );
       const application =
         await applicationRepository.createApplicationWithLocalPrisma(

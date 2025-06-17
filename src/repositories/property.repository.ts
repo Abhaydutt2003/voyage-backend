@@ -28,7 +28,7 @@ class PropertyRepository {
     return repoErrorHandler(() =>
       prisma.property.findUnique({
         where: { id: Number(propertyId) },
-        select: { pricePerMonth: true, securityDeposit: true },
+        select: { pricePerMonth: true, securityDeposit: true, id: true },
       })
     );
   }
@@ -100,6 +100,11 @@ class PropertyRepository {
         where: { id: propertyId },
         include: {
           leases: {
+            where: {
+              application: {
+                status: "Approved",
+              },
+            },
             include: {
               tenant: true,
             },

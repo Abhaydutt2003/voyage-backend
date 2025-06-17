@@ -1,4 +1,5 @@
 import express from "express";
+import multer from "multer";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import {
   createApplication,
@@ -13,11 +14,20 @@ import {
 } from "../middlewares/validation.middleware";
 import { body, param, query } from "express-validator";
 
+const storage = multer.memoryStorage(); //will be held in the server's memory as Buffer objects.
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+});
+
 const router = express.Router();
 
 router.post(
   "/",
   authMiddleware(["tenant"]),
+  upload.array("paymentProof"),
   validateBody([
     body("applicationDate")
       .notEmpty()

@@ -16,7 +16,10 @@ export const listApplications = asyncHandler(
 
 export const createApplication = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const applicationDto = new CreateApplicationDto(req.body);
+    const applicationDto = new CreateApplicationDto(
+      req.files as Express.Multer.File[],
+      req.body
+    );
     const newApplication = await applicationService.createApplication(
       applicationDto
     );
