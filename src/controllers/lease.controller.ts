@@ -9,14 +9,6 @@ export const getLeases = asyncHandler(
   }
 );
 
-export const getLeasePayments = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const payments = await leaseService.getLeasePayments(id);
-    res.json(payments);
-  }
-);
-
 export const getAcceptedLeases = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const acceptedleaseTimes = await leaseService.getAccpetedLeasesTimes(

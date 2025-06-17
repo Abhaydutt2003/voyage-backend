@@ -5,23 +5,14 @@ import {
   NotFoundError,
   UnprocessableEntityError,
 } from "../middlewares/error.middleware";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
 import axios from "axios";
 import { locationRepository } from "../repositories/location.repository";
 import { Location } from "../generated/prisma/client";
 import GetPropertiesDto from "../dtos/property/getProperties.dto";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
+import { s3Service } from "./s3UploadService";
 
 class PropertyService {
-  private s3Client: S3Client;
-
-  constructor() {
-    this.s3Client = new S3Client({
-      region: process.env.AWS_REGION,
-    });
-  }
-
   #getWhereConditionsForProperties(propertyData: GetPropertiesDto) {
     let whereConditions: Prisma.Sql[] = [];
 
@@ -163,24 +154,6 @@ class PropertyService {
     }
   }
 
-  async #uploadFilesToS3(files: Express.Multer.File[]) {
-    return await Promise.all(
-      files.map(async (file) => {
-        const uploadParams = {
-          Bucket: process.env.S3_BUCKET_NAME!,
-          Key: `properties/${Date.now()}-${file.originalname}`,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        };
-        const uploadResult = await new Upload({
-          client: this.s3Client,
-          params: uploadParams,
-        }).done();
-        return uploadResult.Location;
-      })
-    );
-  }
-
   async #getGeoCodingResponse(
     address: any,
     city: any,
@@ -270,7 +243,7 @@ class PropertyService {
 
   async createProperty(propertyData: CreatePropertyDto) {
     //upload to s3
-    // const photoUrls = await this.#uploadFilesToS3(propertyData.files);//TODO remove this comment line after making the S3 work
+    // const photoUrls = await s3Service.uploadFilesToS3(propertyData.files, "properties"); //TODO remove this comment line after making the S3 work
     // create the location obj
     const location = await this.#createLocation(
       propertyData.locationData.address,

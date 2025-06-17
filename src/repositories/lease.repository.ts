@@ -41,11 +41,13 @@ class LeaseRepository {
     pricePerMonth: number,
     securityDeposit: number,
     propertyId: number,
-    tenantCognitoId: string
+    tenantCognitoId: string,
+    paymentProofUrls: string[]
   ) {
     return repoErrorHandler(() =>
       localPrisma.lease.create({
         data: {
+          paymentProof: paymentProofUrls,
           startDate: new Date(startDate),
           endDate: new Date(endDate),
           rent: pricePerMonth,

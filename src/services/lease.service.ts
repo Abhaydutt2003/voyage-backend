@@ -1,6 +1,5 @@
 import { NotFoundError } from "../middlewares/error.middleware";
 import { leaseRepository } from "../repositories/lease.repository";
-import { paymentRepository } from "../repositories/payment.repository";
 
 class LeaseService {
   async getLeases() {
@@ -9,10 +8,6 @@ class LeaseService {
       throw new NotFoundError("No leases found");
     }
     return leases;
-  }
-
-  async getLeasePayments(leaseId: string) {
-    return await paymentRepository.findManyPaymentsWithLeaseId(leaseId);
   }
 
   async getAccpetedLeasesTimes(propertyId: number) {

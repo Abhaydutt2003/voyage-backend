@@ -1,5 +1,5 @@
 class CreateApplicationDto {
-  constructor(body: any) {
+  constructor(files: Express.Multer.File[], body: any) {
     this.applicationDate = body.applicationDate;
     this.startDate = body.startDate;
     this.endDate = body.endDate;
@@ -10,6 +10,7 @@ class CreateApplicationDto {
     this.email = body.email;
     this.phoneNumber = body.phoneNumber;
     this.message = body.message;
+    this.paymentProof = files;
   }
 
   applicationDate: string;
@@ -22,6 +23,7 @@ class CreateApplicationDto {
   email: string;
   phoneNumber: string;
   message: string;
+  paymentProof: Express.Multer.File[];
 }
 
 export default CreateApplicationDto;
