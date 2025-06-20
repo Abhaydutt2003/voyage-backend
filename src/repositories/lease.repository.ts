@@ -38,20 +38,14 @@ class LeaseRepository {
     localPrisma: TransactionPrismaClient,
     startDate: string,
     endDate: string,
-    pricePerMonth: number,
-    securityDeposit: number,
     propertyId: number,
-    tenantCognitoId: string,
-    paymentProofUrls: string[]
+    tenantCognitoId: string
   ) {
     return repoErrorHandler(() =>
       localPrisma.lease.create({
         data: {
-          paymentProof: paymentProofUrls,
           startDate: new Date(startDate),
           endDate: new Date(endDate),
-          rent: pricePerMonth,
-          deposit: securityDeposit,
           property: {
             connect: { id: propertyId },
           },
@@ -68,6 +62,7 @@ class LeaseRepository {
    * or the tenant congnito ids match for that period of time and the lease is not in the denied state
    */
   async getOverlappingleases(
+    localPrisma: TransactionPrismaClient,
     propertyId: number,
     tenantCognitoId: string,
     startDate: string,
@@ -76,7 +71,7 @@ class LeaseRepository {
     const newStartDate = new Date(startDate);
     const newEndDate = new Date(endDate);
     return repoErrorHandler(() =>
-      prisma.lease.findMany({
+      localPrisma.lease.findMany({
         where: {
           propertyId,
           AND: [

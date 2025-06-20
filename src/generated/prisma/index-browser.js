@@ -124,9 +124,7 @@ exports.Prisma.PropertyScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  pricePerMonth: 'pricePerMonth',
-  securityDeposit: 'securityDeposit',
-  applicationFee: 'applicationFee',
+  pricePerNight: 'pricePerNight',
   photoUrls: 'photoUrls',
   amenities: 'amenities',
   highlights: 'highlights',
@@ -177,6 +175,7 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber',
+  paymentProof: 'paymentProof',
   message: 'message',
   leaseId: 'leaseId'
 };
@@ -185,11 +184,8 @@ exports.Prisma.LeaseScalarFieldEnum = {
   id: 'id',
   startDate: 'startDate',
   endDate: 'endDate',
-  rent: 'rent',
-  deposit: 'deposit',
   propertyId: 'propertyId',
-  tenantCognitoId: 'tenantCognitoId',
-  paymentProof: 'paymentProof'
+  tenantCognitoId: 'tenantCognitoId'
 };
 
 exports.Prisma.SortOrder = {

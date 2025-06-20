@@ -24,11 +24,11 @@ class PropertyRepository {
     );
   }
 
-  async fetchPricePerMonthAndSecurityDeposit(propertyId: string) {
+  async findUniqueProperty(propertyId: string) {
     return repoErrorHandler(() =>
       prisma.property.findUnique({
         where: { id: Number(propertyId) },
-        select: { pricePerMonth: true, securityDeposit: true, id: true },
+        select: { id: true },
       })
     );
   }

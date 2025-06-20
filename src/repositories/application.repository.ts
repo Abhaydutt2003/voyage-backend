@@ -1,16 +1,28 @@
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { prisma } from "../lib/prisma";
-import { ApplicationStatus, PrismaClient } from "../generated/prisma/client";
+import {
+  ApplicationStatus,
+  Prisma,
+  PrismaClient,
+} from "../generated/prisma/client";
 import * as runtime from "../generated/prisma/runtime/library";
 import CreateApplicationDto from "../dtos/application/createApplication.dto";
 
 type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
 class ApplicationRepository {
-  async findManyWithWhereClause(whereClause: any) {
+  async findManyWithWhereClause(
+    whereClause: any,
+    orderBy: Prisma.ApplicationOrderByWithRelationInput[],
+    take: number,
+    cursor?: Prisma.ApplicationWhereUniqueInput
+  ) {
     return repoErrorHandler(() =>
       prisma.application.findMany({
         where: whereClause,
+        take,
+        skip: cursor ? 1 : undefined,
+        orderBy,
         include: {
           property: {
             include: {
@@ -18,6 +30,7 @@ class ApplicationRepository {
               manager: true,
             },
           },
+          lease: true,
         },
       })
     );
@@ -26,7 +39,8 @@ class ApplicationRepository {
   async createApplicationWithLocalPrisma(
     localPrisma: TransactionPrismaClient,
     applicationDto: CreateApplicationDto,
-    leaseId: number
+    leaseId: number,
+    paymentProofUrls: string[]
   ) {
     return repoErrorHandler(() =>
       localPrisma.application.create({
@@ -37,6 +51,7 @@ class ApplicationRepository {
           email: applicationDto.email,
           phoneNumber: applicationDto.phoneNumber,
           message: applicationDto.message,
+          paymentProof: paymentProofUrls,
           property: {
             connect: { id: Number(applicationDto.propertyId) },
           },
@@ -50,7 +65,6 @@ class ApplicationRepository {
         include: {
           property: true,
           tenant: true,
-          lease: true,
         },
       })
     );
