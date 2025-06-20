@@ -9,9 +9,7 @@ class CreatePropertyDto {
   propertyData: {
     name: string;
     description: string;
-    pricePerMonth: number;
-    securityDeposit: number;
-    applicationFee: number;
+    pricePerNight: number;
     amenities: Amenity[];
     highlights: Highlight[];
     isPetsAllowed: boolean;
@@ -36,9 +34,7 @@ class CreatePropertyDto {
     this.propertyData = {
       name: body.name,
       description: body.description,
-      pricePerMonth: parseFloat(body.pricePerMonth),
-      securityDeposit: parseFloat(body.securityDeposit),
-      applicationFee: parseFloat(body.applicationFee),
+      pricePerNight: parseFloat(body.pricePerNight),
       amenities:
         typeof body.amenities === "string" ? JSON.parse(body.amenities) : [],
       highlights:

@@ -1,5 +1,4 @@
 import CreateApplicationDto from "../dtos/application/createApplication.dto";
-import { calculateNextPaymentDate } from "../lib/util";
 import {
   NotFoundError,
   UnauthorizedError,
@@ -11,20 +10,32 @@ import { applicationRepository } from "../repositories/application.repository";
 import { leaseRepository } from "../repositories/lease.repository";
 import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
-import { ApplicationStatus } from "../generated/prisma/client";
+import { ApplicationStatus, Prisma } from "../generated/prisma/client";
 import PDFDocument from "pdfkit";
 import { s3Service } from "./s3UploadService";
 
+interface ApplicationCursor {
+  applicationDate: string; //ISO string
+  id: number;
+}
+
 class ApplicationService {
   async listApplications(
+    status: string,
     userId: string | undefined,
-    userType: string | undefined
+    userType: string | undefined,
+    limit: number,
+    afterCursor?: string
   ) {
-    let whereClause = {};
+    let whereClause: Prisma.ApplicationWhereInput = {
+      status: status as ApplicationStatus,
+    };
+
     if (userType === "tenant") {
-      whereClause = { tenantCognitoId: String(userId) };
+      whereClause = { ...whereClause, tenantCognitoId: String(userId) };
     } else if (userType === "manager") {
       whereClause = {
+        ...whereClause,
         property: {
           managerCognitoId: String(userId),
         },
@@ -33,74 +44,122 @@ class ApplicationService {
       throw new UnprocessableEntityError(`userType ${userType} does not exist`);
     }
 
+    const orderBy: Prisma.ApplicationOrderByWithRelationInput[] = [
+      { applicationDate: "desc" },
+      { id: "desc" }, // Tie-breaker for same applicationDate
+    ];
+
+    let decodedCursor: ApplicationCursor | undefined = undefined;
+
+    if (afterCursor) {
+      const decodedString = Buffer.from(afterCursor, "base64").toString(
+        "utf-8"
+      );
+      decodedCursor = JSON.parse(decodedString) as ApplicationCursor;
+      if (
+        !decodedCursor.applicationDate ||
+        typeof decodedCursor.id !== "number"
+      ) {
+        throw new ValidationError(["Invalid cursor format"]);
+      } else if (isNaN(new Date(decodedCursor.applicationDate).getTime())) {
+        throw new ValidationError(["Invalid applicationDate in cursor"]);
+      }
+      whereClause = {
+        ...whereClause,
+        AND: [
+          {
+            OR: [
+              {
+                applicationDate: {
+                  lte: new Date(decodedCursor.applicationDate),
+                },
+              }, // Applications strictly older
+              {
+                AND: [
+                  { applicationDate: new Date(decodedCursor.applicationDate) }, // Same date
+                  { id: { lt: decodedCursor.id } }, // Smaller ID (because sorting DESC)
+                ],
+              },
+            ],
+          },
+        ],
+      };
+    }
+
     const applications = await applicationRepository.findManyWithWhereClause(
-      whereClause
+      whereClause,
+      orderBy,
+      limit + 1,
+      decodedCursor
     );
-    const formattedApplications = await Promise.all(
-      applications.map(async (singleApplication) => {
-        const lease = await leaseRepository.findFirstLeaseWithTenantAndProperty(
-          singleApplication.tenantCognitoId,
-          singleApplication.propertyId
-        );
-        return {
-          ...singleApplication,
-          lease: lease
-            ? {
-                ...lease,
-                nextPaymentDate: calculateNextPaymentDate(lease.startDate),
-              }
-            : null,
-        };
-      })
-    );
-    return formattedApplications;
+
+    const hasMore = applications.length > limit;
+    const itemsToReturn = hasMore ? applications.slice(0, limit) : applications;
+
+    let nextCursor: string | null = null;
+    if (itemsToReturn.length > 0) {
+      const lastApplication = itemsToReturn[itemsToReturn.length - 1];
+      const cursorData: ApplicationCursor = {
+        applicationDate: lastApplication.applicationDate.toISOString(),
+        id: lastApplication.id,
+      };
+      nextCursor = Buffer.from(JSON.stringify(cursorData)).toString("base64");
+    }
+    return {
+      applications: itemsToReturn,
+      hasMore,
+      nextCursor,
+    };
   }
 
   async createApplication(applicationDto: CreateApplicationDto) {
     const { propertyId, startDate, tenantCognitoId, endDate, paymentProof } =
       applicationDto;
-    const property =
-      await propertyRepository.fetchPricePerMonthAndSecurityDeposit(propertyId);
+    const property = await propertyRepository.findUniqueProperty(propertyId);
     if (!property) {
       throw new NotFoundError("Property not found");
     }
 
-    const overlappingLeases = await leaseRepository.getOverlappingleases(
-      Number(propertyId),
-      tenantCognitoId,
-      startDate,
-      endDate
-    );
-
-    if (overlappingLeases && overlappingLeases.length > 0) {
-      throw new ConflictError(
-        "These dates overlap with an existing lease or a pending application you've already submitted."
-      );
-    }
-
-    const newApplication = await prisma.$transaction(async (localPrisma) => {
-      // const paymentProofUrls = await s3Service.uploadFilesToS3(
-      //   paymentProof,
-      //   `paymentProof/${tenantCognitoId}/${property.id}`
-      // );
-      const lease = await leaseRepository.createLeaseWithLocalPrisma(
-        localPrisma,
-        startDate,
-        endDate,
-        property.pricePerMonth,
-        property.securityDeposit,
-        Number(propertyId),
-        tenantCognitoId,
-        []
-      );
-      const application =
-        await applicationRepository.createApplicationWithLocalPrisma(
+    const newApplication = await prisma.$transaction(
+      async (localPrisma) => {
+        const overlappingLeases = await leaseRepository.getOverlappingleases(
           localPrisma,
-          applicationDto,
-          lease.id
+          Number(propertyId),
+          tenantCognitoId,
+          startDate,
+          endDate
         );
-      return application;
-    });
+
+        if (overlappingLeases && overlappingLeases.length > 0) {
+          throw new ConflictError(
+            "These dates overlap with an existing lease or a pending application you've already submitted."
+          );
+        }
+
+        // const paymentProofUrls = await s3Service.uploadFilesToS3(
+        //   paymentProof,
+        //   `paymentProof/${tenantCognitoId}/${property.id}`
+        // );
+        const lease = await leaseRepository.createLeaseWithLocalPrisma(
+          localPrisma,
+          startDate,
+          endDate,
+          Number(propertyId),
+          tenantCognitoId
+        );
+        const application =
+          await applicationRepository.createApplicationWithLocalPrisma(
+            localPrisma,
+            applicationDto,
+            lease.id,
+            []
+          );
+        return application;
+      },
+      {
+        isolationLevel: "Serializable", //crucial to handle race conditons.
+      }
+    );
     return newApplication;
   }
 
@@ -209,7 +268,7 @@ class ApplicationService {
       `Address: ${application.property.location.address}, ${application.property.location.city}, ${application.property.location.state}`
     );
     doc.text(
-      `Price per Month: $${application.property.pricePerMonth.toFixed(2)}`
+      `Price per Night: $${application.property.pricePerNight.toFixed(2)}`
     );
     doc.moveDown();
 
@@ -217,8 +276,7 @@ class ApplicationService {
     doc.fontSize(12).text(`Lease ID: ${application.lease!.id}`);
     doc.text(`Start Date: ${application.lease!.startDate.toDateString()}`);
     doc.text(`End Date: ${application.lease!.endDate.toDateString()}`);
-    doc.text(`Monthly Rent: $${application.lease!.rent.toFixed(2)}`);
-    doc.text(`Security Deposit: $${application.lease!.deposit.toFixed(2)}`);
+
     doc.moveDown();
 
     doc

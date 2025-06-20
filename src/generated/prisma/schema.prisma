@@ -69,9 +69,7 @@ model Property {
   id                Int          @id @default(autoincrement())
   name              String
   description       String
-  pricePerMonth     Float
-  securityDeposit   Float
-  applicationFee    Float
+  pricePerNight     Float
   photoUrls         String[]
   amenities         Amenity[]
   highlights        Highlight[]
@@ -139,6 +137,7 @@ model Application {
   name            String
   email           String
   phoneNumber     String
+  paymentProof    String[]
   message         String?
   leaseId         Int?              @unique
 
@@ -151,11 +150,8 @@ model Lease {
   id              Int      @id @default(autoincrement())
   startDate       DateTime
   endDate         DateTime
-  rent            Float
-  deposit         Float
   propertyId      Int
   tenantCognitoId String
-  paymentProof    String[]
 
   property    Property     @relation(fields: [propertyId], references: [id])
   tenant      Tenant       @relation(fields: [tenantCognitoId], references: [cognitoId])

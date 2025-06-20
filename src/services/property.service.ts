@@ -25,13 +25,13 @@ class PropertyService {
 
     if (propertyData?.priceMin) {
       whereConditions.push(
-        Prisma.sql`p."pricePerMonth" >= ${Number(propertyData.priceMin)}`
+        Prisma.sql`p."pricePerNight" >= ${Number(propertyData.priceMin)}`
       );
     }
 
     if (propertyData?.priceMax) {
       whereConditions.push(
-        Prisma.sql`p."pricePerMonth" <= ${Number(propertyData.priceMax)}`
+        Prisma.sql`p."pricePerNight" <= ${Number(propertyData.priceMax)}`
       );
     }
 

@@ -66,7 +66,12 @@ router.put(
   updateApplicationStatus
 );
 
-router.get("/", authMiddleware(["manager", "tenant"]), listApplications);
+router.get(
+  "/",
+  authMiddleware(["manager", "tenant"]),
+  validateQuery([query("status").notEmpty().withMessage("status is required")]),
+  listApplications
+);
 
 router.get(
   "/:id/agreement",

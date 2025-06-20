@@ -5,10 +5,13 @@ import { asyncHandler } from "../lib/asyncHandler";
 
 export const listApplications = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { userId, userType } = req.query;
+    const { userId, userType, limit, afterCursor, status } = req.query;
     const applications = await applicationService.listApplications(
+      status as string,
       userId as string | undefined,
-      userType as string | undefined
+      userType as string | undefined,
+      limit ? parseInt(limit as string, 10) : 10,
+      afterCursor as string | undefined
     );
     res.json(applications);
   }

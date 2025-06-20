@@ -1581,9 +1581,7 @@ export namespace Prisma {
 
   export type PropertyAvgAggregateOutputType = {
     id: number | null
-    pricePerMonth: number | null
-    securityDeposit: number | null
-    applicationFee: number | null
+    pricePerNight: number | null
     beds: number | null
     baths: number | null
     squareFeet: number | null
@@ -1594,9 +1592,7 @@ export namespace Prisma {
 
   export type PropertySumAggregateOutputType = {
     id: number | null
-    pricePerMonth: number | null
-    securityDeposit: number | null
-    applicationFee: number | null
+    pricePerNight: number | null
     beds: number | null
     baths: number | null
     squareFeet: number | null
@@ -1609,9 +1605,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     description: string | null
-    pricePerMonth: number | null
-    securityDeposit: number | null
-    applicationFee: number | null
+    pricePerNight: number | null
     isPetsAllowed: boolean | null
     isParkingIncluded: boolean | null
     beds: number | null
@@ -1629,9 +1623,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     description: string | null
-    pricePerMonth: number | null
-    securityDeposit: number | null
-    applicationFee: number | null
+    pricePerNight: number | null
     isPetsAllowed: boolean | null
     isParkingIncluded: boolean | null
     beds: number | null
@@ -1649,9 +1641,7 @@ export namespace Prisma {
     id: number
     name: number
     description: number
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls: number
     amenities: number
     highlights: number
@@ -1672,9 +1662,7 @@ export namespace Prisma {
 
   export type PropertyAvgAggregateInputType = {
     id?: true
-    pricePerMonth?: true
-    securityDeposit?: true
-    applicationFee?: true
+    pricePerNight?: true
     beds?: true
     baths?: true
     squareFeet?: true
@@ -1685,9 +1673,7 @@ export namespace Prisma {
 
   export type PropertySumAggregateInputType = {
     id?: true
-    pricePerMonth?: true
-    securityDeposit?: true
-    applicationFee?: true
+    pricePerNight?: true
     beds?: true
     baths?: true
     squareFeet?: true
@@ -1700,9 +1686,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    pricePerMonth?: true
-    securityDeposit?: true
-    applicationFee?: true
+    pricePerNight?: true
     isPetsAllowed?: true
     isParkingIncluded?: true
     beds?: true
@@ -1720,9 +1704,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    pricePerMonth?: true
-    securityDeposit?: true
-    applicationFee?: true
+    pricePerNight?: true
     isPetsAllowed?: true
     isParkingIncluded?: true
     beds?: true
@@ -1740,9 +1722,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
-    pricePerMonth?: true
-    securityDeposit?: true
-    applicationFee?: true
+    pricePerNight?: true
     photoUrls?: true
     amenities?: true
     highlights?: true
@@ -1850,9 +1830,7 @@ export namespace Prisma {
     id: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls: string[]
     amenities: $Enums.Amenity[]
     highlights: $Enums.Highlight[]
@@ -1892,9 +1870,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    pricePerMonth?: boolean
-    securityDeposit?: boolean
-    applicationFee?: boolean
+    pricePerNight?: boolean
     photoUrls?: boolean
     amenities?: boolean
     highlights?: boolean
@@ -1922,9 +1898,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    pricePerMonth?: boolean
-    securityDeposit?: boolean
-    applicationFee?: boolean
+    pricePerNight?: boolean
     photoUrls?: boolean
     amenities?: boolean
     highlights?: boolean
@@ -1947,9 +1921,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    pricePerMonth?: boolean
-    securityDeposit?: boolean
-    applicationFee?: boolean
+    pricePerNight?: boolean
     photoUrls?: boolean
     amenities?: boolean
     highlights?: boolean
@@ -1972,9 +1944,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
-    pricePerMonth?: boolean
-    securityDeposit?: boolean
-    applicationFee?: boolean
+    pricePerNight?: boolean
     photoUrls?: boolean
     amenities?: boolean
     highlights?: boolean
@@ -1991,7 +1961,7 @@ export namespace Prisma {
     managerCognitoId?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "pricePerMonth" | "securityDeposit" | "applicationFee" | "photoUrls" | "amenities" | "highlights" | "isPetsAllowed" | "isParkingIncluded" | "beds" | "baths" | "squareFeet" | "propertyType" | "postedDate" | "averageRating" | "numberOfReviews" | "locationId" | "managerCognitoId", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "pricePerNight" | "photoUrls" | "amenities" | "highlights" | "isPetsAllowed" | "isParkingIncluded" | "beds" | "baths" | "squareFeet" | "propertyType" | "postedDate" | "averageRating" | "numberOfReviews" | "locationId" | "managerCognitoId", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     location?: boolean | LocationDefaultArgs<ExtArgs>
     manager?: boolean | ManagerDefaultArgs<ExtArgs>
@@ -2024,9 +1994,7 @@ export namespace Prisma {
       id: number
       name: string
       description: string
-      pricePerMonth: number
-      securityDeposit: number
-      applicationFee: number
+      pricePerNight: number
       photoUrls: string[]
       amenities: $Enums.Amenity[]
       highlights: $Enums.Highlight[]
@@ -2473,9 +2441,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Property", 'Int'>
     readonly name: FieldRef<"Property", 'String'>
     readonly description: FieldRef<"Property", 'String'>
-    readonly pricePerMonth: FieldRef<"Property", 'Float'>
-    readonly securityDeposit: FieldRef<"Property", 'Float'>
-    readonly applicationFee: FieldRef<"Property", 'Float'>
+    readonly pricePerNight: FieldRef<"Property", 'Float'>
     readonly photoUrls: FieldRef<"Property", 'String[]'>
     readonly amenities: FieldRef<"Property", 'Amenity[]'>
     readonly highlights: FieldRef<"Property", 'Highlight[]'>
@@ -6306,6 +6272,7 @@ export namespace Prisma {
     name: number
     email: number
     phoneNumber: number
+    paymentProof: number
     message: number
     leaseId: number
     _all: number
@@ -6359,6 +6326,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phoneNumber?: true
+    paymentProof?: true
     message?: true
     leaseId?: true
     _all?: true
@@ -6459,6 +6427,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof: string[]
     message: string | null
     leaseId: number | null
     _count: ApplicationCountAggregateOutputType | null
@@ -6491,6 +6460,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
+    paymentProof?: boolean
     message?: boolean
     leaseId?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
@@ -6507,6 +6477,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
+    paymentProof?: boolean
     message?: boolean
     leaseId?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
@@ -6523,6 +6494,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
+    paymentProof?: boolean
     message?: boolean
     leaseId?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
@@ -6539,11 +6511,12 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
+    paymentProof?: boolean
     message?: boolean
     leaseId?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicationDate" | "status" | "propertyId" | "tenantCognitoId" | "name" | "email" | "phoneNumber" | "message" | "leaseId", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicationDate" | "status" | "propertyId" | "tenantCognitoId" | "name" | "email" | "phoneNumber" | "paymentProof" | "message" | "leaseId", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -6576,6 +6549,7 @@ export namespace Prisma {
       name: string
       email: string
       phoneNumber: string
+      paymentProof: string[]
       message: string | null
       leaseId: number | null
     }, ExtArgs["result"]["application"]>
@@ -7012,6 +6986,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Application", 'String'>
     readonly email: FieldRef<"Application", 'String'>
     readonly phoneNumber: FieldRef<"Application", 'String'>
+    readonly paymentProof: FieldRef<"Application", 'String[]'>
     readonly message: FieldRef<"Application", 'String'>
     readonly leaseId: FieldRef<"Application", 'Int'>
   }
@@ -7461,15 +7436,11 @@ export namespace Prisma {
 
   export type LeaseAvgAggregateOutputType = {
     id: number | null
-    rent: number | null
-    deposit: number | null
     propertyId: number | null
   }
 
   export type LeaseSumAggregateOutputType = {
     id: number | null
-    rent: number | null
-    deposit: number | null
     propertyId: number | null
   }
 
@@ -7477,8 +7448,6 @@ export namespace Prisma {
     id: number | null
     startDate: Date | null
     endDate: Date | null
-    rent: number | null
-    deposit: number | null
     propertyId: number | null
     tenantCognitoId: string | null
   }
@@ -7487,8 +7456,6 @@ export namespace Prisma {
     id: number | null
     startDate: Date | null
     endDate: Date | null
-    rent: number | null
-    deposit: number | null
     propertyId: number | null
     tenantCognitoId: string | null
   }
@@ -7497,26 +7464,19 @@ export namespace Prisma {
     id: number
     startDate: number
     endDate: number
-    rent: number
-    deposit: number
     propertyId: number
     tenantCognitoId: number
-    paymentProof: number
     _all: number
   }
 
 
   export type LeaseAvgAggregateInputType = {
     id?: true
-    rent?: true
-    deposit?: true
     propertyId?: true
   }
 
   export type LeaseSumAggregateInputType = {
     id?: true
-    rent?: true
-    deposit?: true
     propertyId?: true
   }
 
@@ -7524,8 +7484,6 @@ export namespace Prisma {
     id?: true
     startDate?: true
     endDate?: true
-    rent?: true
-    deposit?: true
     propertyId?: true
     tenantCognitoId?: true
   }
@@ -7534,8 +7492,6 @@ export namespace Prisma {
     id?: true
     startDate?: true
     endDate?: true
-    rent?: true
-    deposit?: true
     propertyId?: true
     tenantCognitoId?: true
   }
@@ -7544,11 +7500,8 @@ export namespace Prisma {
     id?: true
     startDate?: true
     endDate?: true
-    rent?: true
-    deposit?: true
     propertyId?: true
     tenantCognitoId?: true
-    paymentProof?: true
     _all?: true
   }
 
@@ -7642,11 +7595,8 @@ export namespace Prisma {
     id: number
     startDate: Date
     endDate: Date
-    rent: number
-    deposit: number
     propertyId: number
     tenantCognitoId: string
-    paymentProof: string[]
     _count: LeaseCountAggregateOutputType | null
     _avg: LeaseAvgAggregateOutputType | null
     _sum: LeaseSumAggregateOutputType | null
@@ -7672,11 +7622,8 @@ export namespace Prisma {
     id?: boolean
     startDate?: boolean
     endDate?: boolean
-    rent?: boolean
-    deposit?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
-    paymentProof?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     application?: boolean | Lease$applicationArgs<ExtArgs>
@@ -7686,11 +7633,8 @@ export namespace Prisma {
     id?: boolean
     startDate?: boolean
     endDate?: boolean
-    rent?: boolean
-    deposit?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
-    paymentProof?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lease"]>
@@ -7699,11 +7643,8 @@ export namespace Prisma {
     id?: boolean
     startDate?: boolean
     endDate?: boolean
-    rent?: boolean
-    deposit?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
-    paymentProof?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lease"]>
@@ -7712,14 +7653,11 @@ export namespace Prisma {
     id?: boolean
     startDate?: boolean
     endDate?: boolean
-    rent?: boolean
-    deposit?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
-    paymentProof?: boolean
   }
 
-  export type LeaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "startDate" | "endDate" | "rent" | "deposit" | "propertyId" | "tenantCognitoId" | "paymentProof", ExtArgs["result"]["lease"]>
+  export type LeaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "startDate" | "endDate" | "propertyId" | "tenantCognitoId", ExtArgs["result"]["lease"]>
   export type LeaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -7745,11 +7683,8 @@ export namespace Prisma {
       id: number
       startDate: Date
       endDate: Date
-      rent: number
-      deposit: number
       propertyId: number
       tenantCognitoId: string
-      paymentProof: string[]
     }, ExtArgs["result"]["lease"]>
     composites: {}
   }
@@ -8179,11 +8114,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Lease", 'Int'>
     readonly startDate: FieldRef<"Lease", 'DateTime'>
     readonly endDate: FieldRef<"Lease", 'DateTime'>
-    readonly rent: FieldRef<"Lease", 'Float'>
-    readonly deposit: FieldRef<"Lease", 'Float'>
     readonly propertyId: FieldRef<"Lease", 'Int'>
     readonly tenantCognitoId: FieldRef<"Lease", 'String'>
-    readonly paymentProof: FieldRef<"Lease", 'String[]'>
   }
     
 
@@ -8635,9 +8567,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
-    pricePerMonth: 'pricePerMonth',
-    securityDeposit: 'securityDeposit',
-    applicationFee: 'applicationFee',
+    pricePerNight: 'pricePerNight',
     photoUrls: 'photoUrls',
     amenities: 'amenities',
     highlights: 'highlights',
@@ -8700,6 +8630,7 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     phoneNumber: 'phoneNumber',
+    paymentProof: 'paymentProof',
     message: 'message',
     leaseId: 'leaseId'
   };
@@ -8711,11 +8642,8 @@ export namespace Prisma {
     id: 'id',
     startDate: 'startDate',
     endDate: 'endDate',
-    rent: 'rent',
-    deposit: 'deposit',
     propertyId: 'propertyId',
-    tenantCognitoId: 'tenantCognitoId',
-    paymentProof: 'paymentProof'
+    tenantCognitoId: 'tenantCognitoId'
   };
 
   export type LeaseScalarFieldEnum = (typeof LeaseScalarFieldEnum)[keyof typeof LeaseScalarFieldEnum]
@@ -8879,9 +8807,7 @@ export namespace Prisma {
     id?: IntFilter<"Property"> | number
     name?: StringFilter<"Property"> | string
     description?: StringFilter<"Property"> | string
-    pricePerMonth?: FloatFilter<"Property"> | number
-    securityDeposit?: FloatFilter<"Property"> | number
-    applicationFee?: FloatFilter<"Property"> | number
+    pricePerNight?: FloatFilter<"Property"> | number
     photoUrls?: StringNullableListFilter<"Property">
     amenities?: EnumAmenityNullableListFilter<"Property">
     highlights?: EnumHighlightNullableListFilter<"Property">
@@ -8908,9 +8834,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     photoUrls?: SortOrder
     amenities?: SortOrder
     highlights?: SortOrder
@@ -8940,9 +8864,7 @@ export namespace Prisma {
     NOT?: PropertyWhereInput | PropertyWhereInput[]
     name?: StringFilter<"Property"> | string
     description?: StringFilter<"Property"> | string
-    pricePerMonth?: FloatFilter<"Property"> | number
-    securityDeposit?: FloatFilter<"Property"> | number
-    applicationFee?: FloatFilter<"Property"> | number
+    pricePerNight?: FloatFilter<"Property"> | number
     photoUrls?: StringNullableListFilter<"Property">
     amenities?: EnumAmenityNullableListFilter<"Property">
     highlights?: EnumHighlightNullableListFilter<"Property">
@@ -8969,9 +8891,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     photoUrls?: SortOrder
     amenities?: SortOrder
     highlights?: SortOrder
@@ -9000,9 +8920,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Property"> | number
     name?: StringWithAggregatesFilter<"Property"> | string
     description?: StringWithAggregatesFilter<"Property"> | string
-    pricePerMonth?: FloatWithAggregatesFilter<"Property"> | number
-    securityDeposit?: FloatWithAggregatesFilter<"Property"> | number
-    applicationFee?: FloatWithAggregatesFilter<"Property"> | number
+    pricePerNight?: FloatWithAggregatesFilter<"Property"> | number
     photoUrls?: StringNullableListFilter<"Property">
     amenities?: EnumAmenityNullableListFilter<"Property">
     highlights?: EnumHighlightNullableListFilter<"Property">
@@ -9216,6 +9134,7 @@ export namespace Prisma {
     name?: StringFilter<"Application"> | string
     email?: StringFilter<"Application"> | string
     phoneNumber?: StringFilter<"Application"> | string
+    paymentProof?: StringNullableListFilter<"Application">
     message?: StringNullableFilter<"Application"> | string | null
     leaseId?: IntNullableFilter<"Application"> | number | null
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
@@ -9232,6 +9151,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
+    paymentProof?: SortOrder
     message?: SortOrderInput | SortOrder
     leaseId?: SortOrderInput | SortOrder
     property?: PropertyOrderByWithRelationInput
@@ -9252,6 +9172,7 @@ export namespace Prisma {
     name?: StringFilter<"Application"> | string
     email?: StringFilter<"Application"> | string
     phoneNumber?: StringFilter<"Application"> | string
+    paymentProof?: StringNullableListFilter<"Application">
     message?: StringNullableFilter<"Application"> | string | null
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
@@ -9267,6 +9188,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
+    paymentProof?: SortOrder
     message?: SortOrderInput | SortOrder
     leaseId?: SortOrderInput | SortOrder
     _count?: ApplicationCountOrderByAggregateInput
@@ -9288,6 +9210,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Application"> | string
     email?: StringWithAggregatesFilter<"Application"> | string
     phoneNumber?: StringWithAggregatesFilter<"Application"> | string
+    paymentProof?: StringNullableListFilter<"Application">
     message?: StringNullableWithAggregatesFilter<"Application"> | string | null
     leaseId?: IntNullableWithAggregatesFilter<"Application"> | number | null
   }
@@ -9299,11 +9222,8 @@ export namespace Prisma {
     id?: IntFilter<"Lease"> | number
     startDate?: DateTimeFilter<"Lease"> | Date | string
     endDate?: DateTimeFilter<"Lease"> | Date | string
-    rent?: FloatFilter<"Lease"> | number
-    deposit?: FloatFilter<"Lease"> | number
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
-    paymentProof?: StringNullableListFilter<"Lease">
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     application?: XOR<ApplicationNullableScalarRelationFilter, ApplicationWhereInput> | null
@@ -9313,11 +9233,8 @@ export namespace Prisma {
     id?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
-    paymentProof?: SortOrder
     property?: PropertyOrderByWithRelationInput
     tenant?: TenantOrderByWithRelationInput
     application?: ApplicationOrderByWithRelationInput
@@ -9330,11 +9247,8 @@ export namespace Prisma {
     NOT?: LeaseWhereInput | LeaseWhereInput[]
     startDate?: DateTimeFilter<"Lease"> | Date | string
     endDate?: DateTimeFilter<"Lease"> | Date | string
-    rent?: FloatFilter<"Lease"> | number
-    deposit?: FloatFilter<"Lease"> | number
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
-    paymentProof?: StringNullableListFilter<"Lease">
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     application?: XOR<ApplicationNullableScalarRelationFilter, ApplicationWhereInput> | null
@@ -9344,11 +9258,8 @@ export namespace Prisma {
     id?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
-    paymentProof?: SortOrder
     _count?: LeaseCountOrderByAggregateInput
     _avg?: LeaseAvgOrderByAggregateInput
     _max?: LeaseMaxOrderByAggregateInput
@@ -9363,19 +9274,14 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Lease"> | number
     startDate?: DateTimeWithAggregatesFilter<"Lease"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Lease"> | Date | string
-    rent?: FloatWithAggregatesFilter<"Lease"> | number
-    deposit?: FloatWithAggregatesFilter<"Lease"> | number
     propertyId?: IntWithAggregatesFilter<"Lease"> | number
     tenantCognitoId?: StringWithAggregatesFilter<"Lease"> | string
-    paymentProof?: StringNullableListFilter<"Lease">
   }
 
   export type PropertyCreateInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -9400,9 +9306,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -9426,9 +9330,7 @@ export namespace Prisma {
   export type PropertyUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -9453,9 +9355,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -9480,9 +9380,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -9502,9 +9400,7 @@ export namespace Prisma {
   export type PropertyUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -9523,9 +9419,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -9710,6 +9604,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     property: PropertyCreateNestedOneWithoutApplicationsInput
     tenant: TenantCreateNestedOneWithoutApplicationsInput
@@ -9725,6 +9620,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -9735,6 +9631,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     property?: PropertyUpdateOneRequiredWithoutApplicationsNestedInput
     tenant?: TenantUpdateOneRequiredWithoutApplicationsNestedInput
@@ -9750,6 +9647,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -9763,6 +9661,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -9773,6 +9672,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -9785,6 +9685,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -9792,9 +9693,6 @@ export namespace Prisma {
   export type LeaseCreateInput = {
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     property: PropertyCreateNestedOneWithoutLeasesInput
     tenant: TenantCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
@@ -9804,20 +9702,14 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     propertyId: number
     tenantCognitoId: string
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
   export type LeaseUpdateInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
@@ -9827,11 +9719,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -9839,30 +9728,21 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     propertyId: number
     tenantCognitoId: string
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
   }
 
   export type LeaseUpdateManyMutationInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
   }
 
   export type LeaseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -10020,9 +9900,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     photoUrls?: SortOrder
     amenities?: SortOrder
     highlights?: SortOrder
@@ -10041,9 +9919,7 @@ export namespace Prisma {
 
   export type PropertyAvgOrderByAggregateInput = {
     id?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     beds?: SortOrder
     baths?: SortOrder
     squareFeet?: SortOrder
@@ -10056,9 +9932,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     isPetsAllowed?: SortOrder
     isParkingIncluded?: SortOrder
     beds?: SortOrder
@@ -10076,9 +9950,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     isPetsAllowed?: SortOrder
     isParkingIncluded?: SortOrder
     beds?: SortOrder
@@ -10094,9 +9966,7 @@ export namespace Prisma {
 
   export type PropertySumOrderByAggregateInput = {
     id?: SortOrder
-    pricePerMonth?: SortOrder
-    securityDeposit?: SortOrder
-    applicationFee?: SortOrder
+    pricePerNight?: SortOrder
     beds?: SortOrder
     baths?: SortOrder
     squareFeet?: SortOrder
@@ -10374,6 +10244,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
+    paymentProof?: SortOrder
     message?: SortOrder
     leaseId?: SortOrder
   }
@@ -10453,17 +10324,12 @@ export namespace Prisma {
     id?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
-    paymentProof?: SortOrder
   }
 
   export type LeaseAvgOrderByAggregateInput = {
     id?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
   }
 
@@ -10471,8 +10337,6 @@ export namespace Prisma {
     id?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
   }
@@ -10481,16 +10345,12 @@ export namespace Prisma {
     id?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
   }
 
   export type LeaseSumOrderByAggregateInput = {
     id?: SortOrder
-    rent?: SortOrder
-    deposit?: SortOrder
     propertyId?: SortOrder
   }
 
@@ -10982,6 +10842,10 @@ export namespace Prisma {
     deleteMany?: PropertyScalarWhereInput | PropertyScalarWhereInput[]
   }
 
+  export type ApplicationCreatepaymentProofInput = {
+    set: string[]
+  }
+
   export type PropertyCreateNestedOneWithoutApplicationsInput = {
     create?: XOR<PropertyCreateWithoutApplicationsInput, PropertyUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: PropertyCreateOrConnectWithoutApplicationsInput
@@ -11002,6 +10866,11 @@ export namespace Prisma {
 
   export type EnumApplicationStatusFieldUpdateOperationsInput = {
     set?: $Enums.ApplicationStatus
+  }
+
+  export type ApplicationUpdatepaymentProofInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -11034,10 +10903,6 @@ export namespace Prisma {
     update?: XOR<XOR<LeaseUpdateToOneWithWhereWithoutApplicationInput, LeaseUpdateWithoutApplicationInput>, LeaseUncheckedUpdateWithoutApplicationInput>
   }
 
-  export type LeaseCreatepaymentProofInput = {
-    set: string[]
-  }
-
   export type PropertyCreateNestedOneWithoutLeasesInput = {
     create?: XOR<PropertyCreateWithoutLeasesInput, PropertyUncheckedCreateWithoutLeasesInput>
     connectOrCreate?: PropertyCreateOrConnectWithoutLeasesInput
@@ -11060,11 +10925,6 @@ export namespace Prisma {
     create?: XOR<ApplicationCreateWithoutLeaseInput, ApplicationUncheckedCreateWithoutLeaseInput>
     connectOrCreate?: ApplicationCreateOrConnectWithoutLeaseInput
     connect?: ApplicationWhereUniqueInput
-  }
-
-  export type LeaseUpdatepaymentProofInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type PropertyUpdateOneRequiredWithoutLeasesNestedInput = {
@@ -11368,9 +11228,6 @@ export namespace Prisma {
   export type LeaseCreateWithoutPropertyInput = {
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     tenant: TenantCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
   }
@@ -11379,10 +11236,7 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     tenantCognitoId: string
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
@@ -11402,6 +11256,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     tenant: TenantCreateNestedOneWithoutApplicationsInput
     lease?: LeaseCreateNestedOneWithoutApplicationInput
@@ -11415,6 +11270,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -11552,11 +11408,8 @@ export namespace Prisma {
     id?: IntFilter<"Lease"> | number
     startDate?: DateTimeFilter<"Lease"> | Date | string
     endDate?: DateTimeFilter<"Lease"> | Date | string
-    rent?: FloatFilter<"Lease"> | number
-    deposit?: FloatFilter<"Lease"> | number
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
-    paymentProof?: StringNullableListFilter<"Lease">
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -11587,6 +11440,7 @@ export namespace Prisma {
     name?: StringFilter<"Application"> | string
     email?: StringFilter<"Application"> | string
     phoneNumber?: StringFilter<"Application"> | string
+    paymentProof?: StringNullableListFilter<"Application">
     message?: StringNullableFilter<"Application"> | string | null
     leaseId?: IntNullableFilter<"Application"> | number | null
   }
@@ -11637,9 +11491,7 @@ export namespace Prisma {
   export type PropertyCreateWithoutManagerInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11663,9 +11515,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11718,9 +11568,7 @@ export namespace Prisma {
     id?: IntFilter<"Property"> | number
     name?: StringFilter<"Property"> | string
     description?: StringFilter<"Property"> | string
-    pricePerMonth?: FloatFilter<"Property"> | number
-    securityDeposit?: FloatFilter<"Property"> | number
-    applicationFee?: FloatFilter<"Property"> | number
+    pricePerNight?: FloatFilter<"Property"> | number
     photoUrls?: StringNullableListFilter<"Property">
     amenities?: EnumAmenityNullableListFilter<"Property">
     highlights?: EnumHighlightNullableListFilter<"Property">
@@ -11740,9 +11588,7 @@ export namespace Prisma {
   export type PropertyCreateWithoutTenantsInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11766,9 +11612,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11796,9 +11640,7 @@ export namespace Prisma {
   export type PropertyCreateWithoutFavoritedByInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11822,9 +11664,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -11855,6 +11695,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     property: PropertyCreateNestedOneWithoutApplicationsInput
     lease?: LeaseCreateNestedOneWithoutApplicationInput
@@ -11868,6 +11709,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -11885,9 +11727,6 @@ export namespace Prisma {
   export type LeaseCreateWithoutTenantInput = {
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     property: PropertyCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
   }
@@ -11896,10 +11735,7 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     propertyId: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
@@ -11980,9 +11816,7 @@ export namespace Prisma {
   export type PropertyCreateWithoutLocationInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12006,9 +11840,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12057,9 +11889,7 @@ export namespace Prisma {
   export type PropertyCreateWithoutApplicationsInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12083,9 +11913,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12139,9 +11967,6 @@ export namespace Prisma {
   export type LeaseCreateWithoutApplicationInput = {
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
     property: PropertyCreateNestedOneWithoutLeasesInput
     tenant: TenantCreateNestedOneWithoutLeasesInput
   }
@@ -12150,11 +11975,8 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     propertyId: number
     tenantCognitoId: string
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
   }
 
   export type LeaseCreateOrConnectWithoutApplicationInput = {
@@ -12176,9 +11998,7 @@ export namespace Prisma {
   export type PropertyUpdateWithoutApplicationsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12202,9 +12022,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12270,9 +12088,6 @@ export namespace Prisma {
   export type LeaseUpdateWithoutApplicationInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
   }
@@ -12281,19 +12096,14 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
   }
 
   export type PropertyCreateWithoutLeasesInput = {
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12317,9 +12127,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12376,6 +12184,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     property: PropertyCreateNestedOneWithoutApplicationsInput
     tenant: TenantCreateNestedOneWithoutApplicationsInput
@@ -12390,6 +12199,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
   }
 
@@ -12412,9 +12222,7 @@ export namespace Prisma {
   export type PropertyUpdateWithoutLeasesInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12438,9 +12246,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12509,6 +12315,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     property?: PropertyUpdateOneRequiredWithoutApplicationsNestedInput
     tenant?: TenantUpdateOneRequiredWithoutApplicationsNestedInput
@@ -12523,6 +12330,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -12530,10 +12338,7 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     tenantCognitoId: string
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
   }
 
   export type ApplicationCreateManyPropertyInput = {
@@ -12544,6 +12349,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -12551,9 +12357,6 @@ export namespace Prisma {
   export type LeaseUpdateWithoutPropertyInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
   }
@@ -12562,10 +12365,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -12573,10 +12373,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
   }
 
   export type ApplicationUpdateWithoutPropertyInput = {
@@ -12585,6 +12382,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     tenant?: TenantUpdateOneRequiredWithoutApplicationsNestedInput
     lease?: LeaseUpdateOneWithoutApplicationNestedInput
@@ -12598,6 +12396,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -12610,6 +12409,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -12676,9 +12476,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -12697,9 +12495,7 @@ export namespace Prisma {
   export type PropertyUpdateWithoutManagerInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12723,9 +12519,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12749,9 +12543,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12775,6 +12567,7 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
+    paymentProof?: ApplicationCreatepaymentProofInput | string[]
     message?: string | null
     leaseId?: number | null
   }
@@ -12783,18 +12576,13 @@ export namespace Prisma {
     id?: number
     startDate: Date | string
     endDate: Date | string
-    rent: number
-    deposit: number
     propertyId: number
-    paymentProof?: LeaseCreatepaymentProofInput | string[]
   }
 
   export type PropertyUpdateWithoutTenantsInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12818,9 +12606,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12844,9 +12630,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12866,9 +12650,7 @@ export namespace Prisma {
   export type PropertyUpdateWithoutFavoritedByInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12892,9 +12674,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12918,9 +12698,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -12943,6 +12721,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     property?: PropertyUpdateOneRequiredWithoutApplicationsNestedInput
     lease?: LeaseUpdateOneWithoutApplicationNestedInput
@@ -12956,6 +12735,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -12968,6 +12748,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
+    paymentProof?: ApplicationUpdatepaymentProofInput | string[]
     message?: NullableStringFieldUpdateOperationsInput | string | null
     leaseId?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -12975,9 +12756,6 @@ export namespace Prisma {
   export type LeaseUpdateWithoutTenantInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
   }
@@ -12986,10 +12764,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     propertyId?: IntFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -12997,18 +12772,13 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    rent?: FloatFieldUpdateOperationsInput | number
-    deposit?: FloatFieldUpdateOperationsInput | number
     propertyId?: IntFieldUpdateOperationsInput | number
-    paymentProof?: LeaseUpdatepaymentProofInput | string[]
   }
 
   export type PropertyUpdateWithoutLocationInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -13032,9 +12802,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
@@ -13058,9 +12826,7 @@ export namespace Prisma {
     id?: number
     name: string
     description: string
-    pricePerMonth: number
-    securityDeposit: number
-    applicationFee: number
+    pricePerNight: number
     photoUrls?: PropertyCreatephotoUrlsInput | string[]
     amenities?: PropertyCreateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyCreatehighlightsInput | $Enums.Highlight[]
@@ -13080,9 +12846,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    pricePerMonth?: FloatFieldUpdateOperationsInput | number
-    securityDeposit?: FloatFieldUpdateOperationsInput | number
-    applicationFee?: FloatFieldUpdateOperationsInput | number
+    pricePerNight?: FloatFieldUpdateOperationsInput | number
     photoUrls?: PropertyUpdatephotoUrlsInput | string[]
     amenities?: PropertyUpdateamenitiesInput | $Enums.Amenity[]
     highlights?: PropertyUpdatehighlightsInput | $Enums.Highlight[]
