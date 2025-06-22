@@ -6,17 +6,6 @@ import * as runtime from "../generated/prisma/runtime/library";
 type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
 class LeaseRepository {
-  async findManyLeases() {
-    return repoErrorHandler(() =>
-      prisma.lease.findMany({
-        include: {
-          tenant: true,
-          property: true,
-        },
-      })
-    );
-  }
-
   async findFirstLeaseWithTenantAndProperty(
     tenantCognitoId: string,
     propertyId: number
