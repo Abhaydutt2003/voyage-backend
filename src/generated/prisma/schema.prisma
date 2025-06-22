@@ -152,6 +152,7 @@ model Lease {
   endDate         DateTime
   propertyId      Int
   tenantCognitoId String
+  reviewAdded     Boolean  @default(false)
 
   property    Property     @relation(fields: [propertyId], references: [id])
   tenant      Tenant       @relation(fields: [tenantCognitoId], references: [cognitoId])

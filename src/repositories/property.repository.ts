@@ -2,8 +2,43 @@ import { Prisma } from "../generated/prisma/client";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { prisma } from "../lib/prisma";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
+import { PrismaClient } from "../generated/prisma/client";
+import * as runtime from "../generated/prisma/runtime/library";
+type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
 class PropertyRepository {
+  async addReview(
+    localPrisma: TransactionPrismaClient,
+    propertyId: number,
+    newAverageRating: number,
+    newNumberOfReviews: number
+  ) {
+    return repoErrorHandler(() =>
+      localPrisma.property.update({
+        where: { id: propertyId },
+        data: {
+          averageRating: newAverageRating,
+          numberOfReviews: newNumberOfReviews,
+        },
+      })
+    );
+  }
+
+  async getPropertyReviewData(
+    localPrisma: TransactionPrismaClient,
+    id: number
+  ) {
+    return repoErrorHandler(() =>
+      localPrisma.property.findUnique({
+        where: { id },
+        select: {
+          averageRating: true,
+          numberOfReviews: true,
+        },
+      })
+    );
+  }
+
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
     return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
   }
