@@ -256,14 +256,13 @@ class ApplicationService {
     doc.moveDown();
 
     doc.fontSize(16).text("Tenant Details:");
-    doc.fontSize(12).text(`Name: ${application.tenant.name}`);
-    doc.text(`Email: ${application.tenant.email}`);
-    doc.text(`Phone: ${application.tenant.phoneNumber}`);
+    doc.fontSize(12).text(`Name: ${application.name}`);
+    doc.text(`Email: ${application.email}`);
+    doc.text(`Phone: ${application.phoneNumber}`);
     doc.moveDown();
 
     doc.fontSize(16).text("Property Details:");
     doc.fontSize(12).text(`Property Name: ${application.property.name}`);
-    doc.text(`Description: ${application.property.description}`);
     doc.text(
       `Address: ${application.property.location.address}, ${application.property.location.city}, ${application.property.location.state}`
     );

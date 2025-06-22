@@ -38,7 +38,16 @@ router.post(
       .notEmpty()
       .withMessage("startDate is required")
       .isISO8601()
-      .withMessage("startDate must be in ISO 8601 format (YYYY-MM-DD)"),
+      .withMessage("startDate must be in ISO 8601 format (YYYY-MM-DD)")
+      .custom((startDate, { req }) => {
+        if (
+          req.body.endDate &&
+          new Date(startDate) >= new Date(req.body.endDate)
+        ) {
+          throw new Error("startDate must be less than endDate");
+        }
+        return true;
+      }),
     body("endDate")
       .notEmpty()
       .withMessage("endDate is required")
