@@ -10,7 +10,7 @@ import { locationRepository } from "../repositories/location.repository";
 import { Location } from "../generated/prisma/client";
 import GetPropertiesDto from "../dtos/property/getProperties.dto";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
-import { s3Service } from "./s3UploadService";
+import { s3Service } from "./s3Service";
 
 class PropertyService {
   #getWhereConditionsForProperties(propertyData: GetPropertiesDto) {
