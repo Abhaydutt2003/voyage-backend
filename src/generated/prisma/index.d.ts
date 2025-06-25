@@ -7450,6 +7450,7 @@ export namespace Prisma {
     endDate: Date | null
     propertyId: number | null
     tenantCognitoId: string | null
+    reviewAdded: boolean | null
   }
 
   export type LeaseMaxAggregateOutputType = {
@@ -7458,6 +7459,7 @@ export namespace Prisma {
     endDate: Date | null
     propertyId: number | null
     tenantCognitoId: string | null
+    reviewAdded: boolean | null
   }
 
   export type LeaseCountAggregateOutputType = {
@@ -7466,6 +7468,7 @@ export namespace Prisma {
     endDate: number
     propertyId: number
     tenantCognitoId: number
+    reviewAdded: number
     _all: number
   }
 
@@ -7486,6 +7489,7 @@ export namespace Prisma {
     endDate?: true
     propertyId?: true
     tenantCognitoId?: true
+    reviewAdded?: true
   }
 
   export type LeaseMaxAggregateInputType = {
@@ -7494,6 +7498,7 @@ export namespace Prisma {
     endDate?: true
     propertyId?: true
     tenantCognitoId?: true
+    reviewAdded?: true
   }
 
   export type LeaseCountAggregateInputType = {
@@ -7502,6 +7507,7 @@ export namespace Prisma {
     endDate?: true
     propertyId?: true
     tenantCognitoId?: true
+    reviewAdded?: true
     _all?: true
   }
 
@@ -7597,6 +7603,7 @@ export namespace Prisma {
     endDate: Date
     propertyId: number
     tenantCognitoId: string
+    reviewAdded: boolean
     _count: LeaseCountAggregateOutputType | null
     _avg: LeaseAvgAggregateOutputType | null
     _sum: LeaseSumAggregateOutputType | null
@@ -7624,6 +7631,7 @@ export namespace Prisma {
     endDate?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
+    reviewAdded?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
     application?: boolean | Lease$applicationArgs<ExtArgs>
@@ -7635,6 +7643,7 @@ export namespace Prisma {
     endDate?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
+    reviewAdded?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lease"]>
@@ -7645,6 +7654,7 @@ export namespace Prisma {
     endDate?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
+    reviewAdded?: boolean
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lease"]>
@@ -7655,9 +7665,10 @@ export namespace Prisma {
     endDate?: boolean
     propertyId?: boolean
     tenantCognitoId?: boolean
+    reviewAdded?: boolean
   }
 
-  export type LeaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "startDate" | "endDate" | "propertyId" | "tenantCognitoId", ExtArgs["result"]["lease"]>
+  export type LeaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "startDate" | "endDate" | "propertyId" | "tenantCognitoId" | "reviewAdded", ExtArgs["result"]["lease"]>
   export type LeaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | PropertyDefaultArgs<ExtArgs>
     tenant?: boolean | TenantDefaultArgs<ExtArgs>
@@ -7685,6 +7696,7 @@ export namespace Prisma {
       endDate: Date
       propertyId: number
       tenantCognitoId: string
+      reviewAdded: boolean
     }, ExtArgs["result"]["lease"]>
     composites: {}
   }
@@ -8116,6 +8128,7 @@ export namespace Prisma {
     readonly endDate: FieldRef<"Lease", 'DateTime'>
     readonly propertyId: FieldRef<"Lease", 'Int'>
     readonly tenantCognitoId: FieldRef<"Lease", 'String'>
+    readonly reviewAdded: FieldRef<"Lease", 'Boolean'>
   }
     
 
@@ -8643,7 +8656,8 @@ export namespace Prisma {
     startDate: 'startDate',
     endDate: 'endDate',
     propertyId: 'propertyId',
-    tenantCognitoId: 'tenantCognitoId'
+    tenantCognitoId: 'tenantCognitoId',
+    reviewAdded: 'reviewAdded'
   };
 
   export type LeaseScalarFieldEnum = (typeof LeaseScalarFieldEnum)[keyof typeof LeaseScalarFieldEnum]
@@ -9224,6 +9238,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"Lease"> | Date | string
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
+    reviewAdded?: BoolFilter<"Lease"> | boolean
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     application?: XOR<ApplicationNullableScalarRelationFilter, ApplicationWhereInput> | null
@@ -9235,6 +9250,7 @@ export namespace Prisma {
     endDate?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
+    reviewAdded?: SortOrder
     property?: PropertyOrderByWithRelationInput
     tenant?: TenantOrderByWithRelationInput
     application?: ApplicationOrderByWithRelationInput
@@ -9249,6 +9265,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"Lease"> | Date | string
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
+    reviewAdded?: BoolFilter<"Lease"> | boolean
     property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
     tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     application?: XOR<ApplicationNullableScalarRelationFilter, ApplicationWhereInput> | null
@@ -9260,6 +9277,7 @@ export namespace Prisma {
     endDate?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
+    reviewAdded?: SortOrder
     _count?: LeaseCountOrderByAggregateInput
     _avg?: LeaseAvgOrderByAggregateInput
     _max?: LeaseMaxOrderByAggregateInput
@@ -9276,6 +9294,7 @@ export namespace Prisma {
     endDate?: DateTimeWithAggregatesFilter<"Lease"> | Date | string
     propertyId?: IntWithAggregatesFilter<"Lease"> | number
     tenantCognitoId?: StringWithAggregatesFilter<"Lease"> | string
+    reviewAdded?: BoolWithAggregatesFilter<"Lease"> | boolean
   }
 
   export type PropertyCreateInput = {
@@ -9693,6 +9712,7 @@ export namespace Prisma {
   export type LeaseCreateInput = {
     startDate: Date | string
     endDate: Date | string
+    reviewAdded?: boolean
     property: PropertyCreateNestedOneWithoutLeasesInput
     tenant: TenantCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
@@ -9704,12 +9724,14 @@ export namespace Prisma {
     endDate: Date | string
     propertyId: number
     tenantCognitoId: string
+    reviewAdded?: boolean
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
   export type LeaseUpdateInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
@@ -9721,6 +9743,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -9730,11 +9753,13 @@ export namespace Prisma {
     endDate: Date | string
     propertyId: number
     tenantCognitoId: string
+    reviewAdded?: boolean
   }
 
   export type LeaseUpdateManyMutationInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LeaseUncheckedUpdateManyInput = {
@@ -9743,6 +9768,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -10326,6 +10352,7 @@ export namespace Prisma {
     endDate?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
+    reviewAdded?: SortOrder
   }
 
   export type LeaseAvgOrderByAggregateInput = {
@@ -10339,6 +10366,7 @@ export namespace Prisma {
     endDate?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
+    reviewAdded?: SortOrder
   }
 
   export type LeaseMinOrderByAggregateInput = {
@@ -10347,6 +10375,7 @@ export namespace Prisma {
     endDate?: SortOrder
     propertyId?: SortOrder
     tenantCognitoId?: SortOrder
+    reviewAdded?: SortOrder
   }
 
   export type LeaseSumOrderByAggregateInput = {
@@ -11228,6 +11257,7 @@ export namespace Prisma {
   export type LeaseCreateWithoutPropertyInput = {
     startDate: Date | string
     endDate: Date | string
+    reviewAdded?: boolean
     tenant: TenantCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
   }
@@ -11237,6 +11267,7 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     tenantCognitoId: string
+    reviewAdded?: boolean
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
@@ -11410,6 +11441,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"Lease"> | Date | string
     propertyId?: IntFilter<"Lease"> | number
     tenantCognitoId?: StringFilter<"Lease"> | string
+    reviewAdded?: BoolFilter<"Lease"> | boolean
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -11727,6 +11759,7 @@ export namespace Prisma {
   export type LeaseCreateWithoutTenantInput = {
     startDate: Date | string
     endDate: Date | string
+    reviewAdded?: boolean
     property: PropertyCreateNestedOneWithoutLeasesInput
     application?: ApplicationCreateNestedOneWithoutLeaseInput
   }
@@ -11736,6 +11769,7 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     propertyId: number
+    reviewAdded?: boolean
     application?: ApplicationUncheckedCreateNestedOneWithoutLeaseInput
   }
 
@@ -11967,6 +12001,7 @@ export namespace Prisma {
   export type LeaseCreateWithoutApplicationInput = {
     startDate: Date | string
     endDate: Date | string
+    reviewAdded?: boolean
     property: PropertyCreateNestedOneWithoutLeasesInput
     tenant: TenantCreateNestedOneWithoutLeasesInput
   }
@@ -11977,6 +12012,7 @@ export namespace Prisma {
     endDate: Date | string
     propertyId: number
     tenantCognitoId: string
+    reviewAdded?: boolean
   }
 
   export type LeaseCreateOrConnectWithoutApplicationInput = {
@@ -12088,6 +12124,7 @@ export namespace Prisma {
   export type LeaseUpdateWithoutApplicationInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
   }
@@ -12098,6 +12135,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     propertyId?: IntFieldUpdateOperationsInput | number
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PropertyCreateWithoutLeasesInput = {
@@ -12339,6 +12377,7 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     tenantCognitoId: string
+    reviewAdded?: boolean
   }
 
   export type ApplicationCreateManyPropertyInput = {
@@ -12357,6 +12396,7 @@ export namespace Prisma {
   export type LeaseUpdateWithoutPropertyInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     tenant?: TenantUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
   }
@@ -12366,6 +12406,7 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -12374,6 +12415,7 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     tenantCognitoId?: StringFieldUpdateOperationsInput | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ApplicationUpdateWithoutPropertyInput = {
@@ -12577,6 +12619,7 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     propertyId: number
+    reviewAdded?: boolean
   }
 
   export type PropertyUpdateWithoutTenantsInput = {
@@ -12756,6 +12799,7 @@ export namespace Prisma {
   export type LeaseUpdateWithoutTenantInput = {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     property?: PropertyUpdateOneRequiredWithoutLeasesNestedInput
     application?: ApplicationUpdateOneWithoutLeaseNestedInput
   }
@@ -12765,6 +12809,7 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     propertyId?: IntFieldUpdateOperationsInput | number
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
     application?: ApplicationUncheckedUpdateOneWithoutLeaseNestedInput
   }
 
@@ -12773,6 +12818,7 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     propertyId?: IntFieldUpdateOperationsInput | number
+    reviewAdded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PropertyUpdateWithoutLocationInput = {

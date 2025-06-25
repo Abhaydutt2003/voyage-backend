@@ -10,3 +10,14 @@ export const getAcceptedLeases = asyncHandler(
     res.json(acceptedleaseTimes);
   }
 );
+
+export const reviewLeaseProperty = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { leaseId, propertyId, reviewRating } = req.body;
+    await leaseService.reviewLeaseProperty(
+      parseInt(leaseId),
+      parseInt(propertyId),
+      parseInt(reviewRating)
+    );
+  }
+);
