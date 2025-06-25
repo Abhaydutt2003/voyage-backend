@@ -185,8 +185,7 @@ exports.Prisma.LeaseScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   propertyId: 'propertyId',
-  tenantCognitoId: 'tenantCognitoId',
-  reviewAdded: 'reviewAdded'
+  tenantCognitoId: 'tenantCognitoId'
 };
 
 exports.Prisma.SortOrder = {
