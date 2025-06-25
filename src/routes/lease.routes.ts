@@ -4,8 +4,11 @@ import {
   getAcceptedLeases,
   reviewLeaseProperty,
 } from "../controllers/lease.controller";
-import { validateQuery } from "../middlewares/validation.middleware";
-import { body, param, query } from "express-validator";
+import {
+  validateBody,
+  validateQuery,
+} from "../middlewares/validation.middleware";
+import { body, query } from "express-validator";
 
 const router = express.Router();
 
@@ -21,7 +24,7 @@ router.get(
 router.post(
   "/reviewLeaseProperty",
   authMiddleware(["tenant"]),
-  validateQuery([
+  validateBody([
     body("leaseId").notEmpty().withMessage("leaseId is required"),
     body("propertyId").notEmpty().withMessage("propertyId is required"),
     body("reviewRating")

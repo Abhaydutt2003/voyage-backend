@@ -12,7 +12,7 @@ import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
 import { ApplicationStatus, Prisma } from "../generated/prisma/client";
 import PDFDocument from "pdfkit";
-import { s3Service } from "./s3UploadService";
+import { s3Service } from "./s3Service";
 
 interface ApplicationCursor {
   applicationDate: string; //ISO string
