@@ -27,7 +27,7 @@ const isValidUploadType: CustomValidator = (value: string) => {
 const router = express.Router();
 
 router.post(
-  "/file-upload/presigned-put-urls",
+  "/files-upload/presigned-put-urls",
   authMiddleware(["manager", "tenant"]),
   validateBody([
     body("filesInformation")
@@ -60,3 +60,5 @@ router.post(
   ]),
   getPresignedPutUrls
 );
+
+export default router;

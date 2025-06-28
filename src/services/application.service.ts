@@ -113,8 +113,13 @@ class ApplicationService {
   }
 
   async createApplication(applicationDto: CreateApplicationDto) {
-    const { propertyId, startDate, tenantCognitoId, endDate, paymentProof } =
-      applicationDto;
+    const {
+      propertyId,
+      startDate,
+      tenantCognitoId,
+      endDate,
+      paymentProofsBaseKeys,
+    } = applicationDto;
     const property = await propertyRepository.findUniqueProperty(propertyId);
     if (!property) {
       throw new NotFoundError("Property not found");
@@ -135,11 +140,6 @@ class ApplicationService {
             "These dates overlap with an existing lease or a pending application you've already submitted."
           );
         }
-
-        // const paymentProofUrls = await s3Service.uploadFilesToS3(
-        //   paymentProof,
-        //   `paymentProof/${tenantCognitoId}/${property.id}`
-        // );
         const lease = await leaseRepository.createLeaseWithLocalPrisma(
           localPrisma,
           startDate,
@@ -152,7 +152,7 @@ class ApplicationService {
             localPrisma,
             applicationDto,
             lease.id,
-            []
+            paymentProofsBaseKeys
           );
         return application;
       },

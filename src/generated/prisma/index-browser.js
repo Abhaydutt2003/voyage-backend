@@ -125,7 +125,7 @@ exports.Prisma.PropertyScalarFieldEnum = {
   name: 'name',
   description: 'description',
   pricePerNight: 'pricePerNight',
-  photoUrls: 'photoUrls',
+  photoUrlsBaseKeys: 'photoUrlsBaseKeys',
   amenities: 'amenities',
   highlights: 'highlights',
   isPetsAllowed: 'isPetsAllowed',
@@ -175,7 +175,7 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phoneNumber: 'phoneNumber',
-  paymentProof: 'paymentProof',
+  paymentProofsBaseKeys: 'paymentProofsBaseKeys',
   message: 'message',
   leaseId: 'leaseId'
 };

@@ -23,9 +23,13 @@ class S3Service {
 
   #generateS3Key(uploadType: UploadType, fileName: string): string {
     const folder = UPLOAD_TYPE_TO_FOLDER[uploadType];
-    const timestamp = Date.now();
+    const timestamp = Date.now(); // Keep the timestamp
     const sanitizedFileName = this.#sanitizeFileName(fileName);
-    return `${folder}/${timestamp}/${sanitizedFileName}`;
+    const fileNameParts = sanitizedFileName.split(".");
+    const extension = fileNameParts.pop();
+    const baseName = fileNameParts.join(".");
+    const newFileName = `${baseName}_${timestamp}.${extension}`;
+    return `${folder}/${newFileName}`;
   }
 
   #sanitizeFileName(fileName: string) {
@@ -54,7 +58,7 @@ class S3Service {
         const url = await this.#generatePutPresignedUrl(s3Key, fileType);
         return {
           index,
-          result: { fileName, url },
+          result: { s3Key, url },
         };
       } catch (error) {
         throw new ApplicationError("Failed yo generate urls.");

@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import {
   createProperty,
@@ -12,14 +11,6 @@ import {
   validateParams,
 } from "../middlewares/validation.middleware";
 import { body, param } from "express-validator";
-
-const storage = multer.memoryStorage(); //will be held in the server's memory as Buffer objects.
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-  },
-}); //methods like .array() to apply middleware to the routes
 
 const router = express.Router();
 
@@ -39,7 +30,6 @@ router.get(
 router.post(
   "/",
   authMiddleware(["manager"]),
-  upload.array("photos"), //field in the form should be names photos, multer will add a req.files object
   validateBody([
     body("name").notEmpty().withMessage("Property name is required"),
     body("description")

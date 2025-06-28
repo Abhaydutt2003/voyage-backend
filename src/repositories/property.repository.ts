@@ -76,14 +76,14 @@ class PropertyRepository {
 
   async createProperty(
     propertyData: CreatePropertyDto,
-    photoUrls: string[],
+    photoUrlsBaseKeys: string[],
     locationId: number
   ) {
     return repoErrorHandler(() =>
       prisma.property.create({
         data: {
           ...propertyData.propertyData,
-          photoUrls: photoUrls,
+          photoUrlsBaseKeys,
           locationId,
         },
         include: {
