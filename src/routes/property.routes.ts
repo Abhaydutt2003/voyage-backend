@@ -5,6 +5,7 @@ import {
   getProperties,
   getProperty,
   getPropertyLeases,
+  getPropertyLight,
 } from "../controllers/property.controller";
 import {
   validateBody,
@@ -17,6 +18,8 @@ const router = express.Router();
 router.get("/", getProperties);
 
 router.get("/:id", getProperty);
+
+router.get("/:id/light", getPropertyLight);
 
 router.get(
   "/:id/leases",

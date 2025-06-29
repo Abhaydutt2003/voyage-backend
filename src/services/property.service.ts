@@ -162,6 +162,14 @@ class PropertyService {
           },
         },
       };
+
+      //update the base keys with the presigned urls .
+      const baseKeys = propertyWithCoordinates.photoUrlsBaseKeys;
+      let presignedUrls: string[] = [];
+      if (baseKeys) {
+        presignedUrls = await s3Service.getGetPresignedUrls(baseKeys);
+      }
+      propertyWithCoordinates.photoUrlsBaseKeys = presignedUrls;
       return propertyWithCoordinates;
     } else {
       throw new NotFoundError(`Property not found with id : ${id}`);
@@ -277,6 +285,25 @@ class PropertyService {
       propertyId
     );
     return propertyWithLeases?.leases;
+  }
+
+  async getPropertyLight(propertyId: number) {
+    const property = await propertyRepository.findPropertyByIdLight(propertyId);
+    if (!property) {
+      throw new NotFoundError("Property not found");
+    }
+    let baseKeys = property?.photoUrlsBaseKeys;
+    //only send the first image
+    if (baseKeys) {
+      baseKeys.splice(1);
+      //make sure that this image can be accesed for 10 days.
+      const presignedUrls = await s3Service.getGetPresignedUrls(
+        baseKeys,
+        1000 * 60 * 60 * 24 * 10
+      );
+      baseKeys = presignedUrls;
+    }
+    return property;
   }
 }
 

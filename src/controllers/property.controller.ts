@@ -4,6 +4,14 @@ import GetPropertiesDto from "../dtos/property/getProperties.dto";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
 import { asyncHandler } from "../lib/asyncHandler";
 
+export const getPropertyLight = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const property = await propertyService.getPropertyLight(Number(id));
+    res.json(property);
+  }
+);
+
 export const getProperties = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const propertyData = new GetPropertiesDto(req.query);

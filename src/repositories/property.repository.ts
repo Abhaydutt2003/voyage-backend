@@ -39,6 +39,25 @@ class PropertyRepository {
     );
   }
 
+  async findPropertyByIdLight(id: number) {
+    return repoErrorHandler(() =>
+      prisma.property.findUnique({
+        where: { id },
+        select: {
+          name: true,
+          description: true,
+          pricePerNight: true,
+          photoUrlsBaseKeys: true,
+          location: {
+            select: {
+              state: true,
+            },
+          },
+        },
+      })
+    );
+  }
+
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
     return repoErrorHandler(() => prisma.$queryRaw<Property[]>(rawSqlQuery));
   }

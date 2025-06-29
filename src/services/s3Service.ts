@@ -50,12 +50,12 @@ class S3Service {
     });
   }
 
-  async #generateGetPresignedUrls(baseKey: string) {
+  async #generateGetPresignedUrls(baseKey: string, timeToExpire: number) {
     return getCloudfrontSignedUrl({
       url: `${this.cloudfrontDistributionDomain}/${baseKey}`,
       privateKey: process.env.CLOUDFRONT_PRIVATE_KEY!,
       keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID!,
-      dateLessThan: new Date(Date.now() + 1000 * 60 * 60),
+      dateLessThan: new Date(Date.now() + timeToExpire),
     });
   }
 
@@ -79,10 +79,16 @@ class S3Service {
     return await Promise.all(promises); //use promises.all instead of allSettled
   }
 
-  async getGetPresignedUrls(fileBaseKeys: string[]) {
+  async getGetPresignedUrls(
+    fileBaseKeys: string[],
+    timeToExpire = 1000 * 60 * 60
+  ) {
     const promises = fileBaseKeys.map(async (singleBaseKey, index) => {
       try {
-        const url = await this.#generateGetPresignedUrls(singleBaseKey);
+        const url = await this.#generateGetPresignedUrls(
+          singleBaseKey,
+          timeToExpire
+        );
         return url;
       } catch (error) {
         return ""; //will show nothing if unable to make the url.
