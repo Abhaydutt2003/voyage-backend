@@ -1,8 +1,4 @@
-import { ApplicationStatus } from "../generated/prisma";
-import type {
-  ApplicationUncheckedCreateInput,
-  LeaseUncheckedCreateInput,
-} from "../generated/prisma";
+import { ApplicationStatus, Prisma } from "../generated/prisma/client";
 
 /**
  * Type for creating a new application
@@ -32,7 +28,7 @@ export type CreateApplicationPayload = {
 export type CreateApplicationPayloadExtended =
   // Pick required fields from ApplicationUncheckedCreateInput
   Pick<
-    ApplicationUncheckedCreateInput,
+    Prisma.ApplicationUncheckedCreateInput,
     | "applicationDate"
     | "status"
     | "propertyId"
@@ -44,7 +40,7 @@ export type CreateApplicationPayloadExtended =
     | "message"
   > &
     // Pick required fields from LeaseUncheckedCreateInput
-    Pick<LeaseUncheckedCreateInput, "startDate" | "endDate"> & {
+    Pick<Prisma.LeaseUncheckedCreateInput, "startDate" | "endDate"> & {
       // Override types to be more specific for API
       applicationDate: string; // ISO 8601 format
       startDate: string; // ISO 8601 format

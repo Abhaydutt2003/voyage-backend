@@ -6,10 +6,12 @@ import {
   UploadType,
 } from "../lib/filesConfig";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getSignedUrl as getCloudfrontSignedUrl } from "@aws-sdk/cloudfront-signer";
 import { ApplicationError } from "../middlewares/error.middleware";
 
 class S3Service {
   private s3Client: S3Client;
+  private cloudfrontDistributionDomain: string;
 
   constructor() {
     this.s3Client = new S3Client({
@@ -19,6 +21,7 @@ class S3Service {
         secretAccessKey: config.aws.secretAccessKey,
       },
     });
+    this.cloudfrontDistributionDomain = "https://dxasclf72vqk5.cloudfront.net";
   }
 
   #generateS3Key(uploadType: UploadType, fileName: string): string {
@@ -47,6 +50,15 @@ class S3Service {
     });
   }
 
+  async #generateGetPresignedUrls(baseKey: string) {
+    return getCloudfrontSignedUrl({
+      url: `${this.cloudfrontDistributionDomain}/${baseKey}`,
+      privateKey: process.env.CLOUDFRONT_PRIVATE_KEY!,
+      keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID!,
+      dateLessThan: new Date(Date.now() + 1000 * 60 * 60),
+    });
+  }
+
   async getPutPresignedUrls(
     filesInformation: FileInformation[],
     uploadType: UploadType
@@ -61,10 +73,22 @@ class S3Service {
           result: { s3Key, url },
         };
       } catch (error) {
-        throw new ApplicationError("Failed yo generate urls.");
+        throw new ApplicationError("Failed to generate urls.");
       }
     });
     return await Promise.all(promises); //use promises.all instead of allSettled
+  }
+
+  async getGetPresignedUrls(fileBaseKeys: string[]) {
+    const promises = fileBaseKeys.map(async (singleBaseKey, index) => {
+      try {
+        const url = await this.#generateGetPresignedUrls(singleBaseKey);
+        return url;
+      } catch (error) {
+        return ""; //will show nothing if unable to make the url.
+      }
+    });
+    return await Promise.all(promises);
   }
 }
 

@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma/client";
+import { Location, Prisma, Property } from "../generated/prisma/client";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { prisma } from "../lib/prisma";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
@@ -40,7 +40,7 @@ class PropertyRepository {
   }
 
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
-    return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
+    return repoErrorHandler(() => prisma.$queryRaw<Property[]>(rawSqlQuery));
   }
 
   async findPropertyById(id: number) {

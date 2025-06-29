@@ -1,5 +1,5 @@
 import { wktToGeoJSON } from "@terraformer/wkt";
-import { Prisma } from "../generated/prisma/client";
+import { Prisma, Property } from "../generated/prisma/client";
 import { propertyRepository } from "../repositories/property.repository";
 import {
   NotFoundError,
@@ -124,7 +124,21 @@ class PropertyService {
       }
     `;
 
-    return await propertyRepository.fetchPropertiesWithSql(completeQuery);
+    //update the base keys to be presigned urls.
+    let properties = await propertyRepository.fetchPropertiesWithSql(
+      completeQuery
+    );
+    await Promise.all(
+      properties.map(async (singleProperty) => {
+        const baseKeys = singleProperty.photoUrlsBaseKeys;
+        let presignedUrls: string[] = [];
+        if (baseKeys) {
+          presignedUrls = await s3Service.getGetPresignedUrls(baseKeys);
+        }
+        singleProperty.photoUrlsBaseKeys = presignedUrls;
+      })
+    );
+    return properties;
   }
 
   async getProperty(id: string) {
