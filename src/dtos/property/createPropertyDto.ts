@@ -19,8 +19,8 @@ class CreatePropertyDto {
     squareFeet: number;
     propertyType: PropertyType;
     managerCognitoId: string;
+    photoUrlsBaseKeys: string[];
   };
-  files: Express.Multer.File[];
   // Location fields
   locationData: {
     address: string;
@@ -46,6 +46,7 @@ class CreatePropertyDto {
       squareFeet: parseInt(body.squareFeet),
       propertyType: body.propertyType,
       managerCognitoId: body.managerCognitoId,
+      photoUrlsBaseKeys: body.photoUrlsBaseKeys,
     };
     this.locationData = {
       address: body.address,
@@ -54,7 +55,6 @@ class CreatePropertyDto {
       country: body.country,
       postalCode: body.postalCode,
     };
-    this.files = files;
   }
 }
 

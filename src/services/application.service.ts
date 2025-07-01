@@ -12,7 +12,7 @@ import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
 import { ApplicationStatus, Prisma } from "../generated/prisma/client";
 import PDFDocument from "pdfkit";
-import { s3Service } from "./s3Service";
+import { transformerService } from "./transformer.service";
 
 interface ApplicationCursor {
   applicationDate: string; //ISO string
@@ -105,6 +105,22 @@ class ApplicationService {
       };
       nextCursor = Buffer.from(JSON.stringify(cursorData)).toString("base64");
     }
+    //tranform the applications payments proofs.
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      applications,
+      "paymentProofsBaseKeys"
+    );
+    //get the property array.
+    const properties = applications.map((singleApplication) => {
+      return singleApplication.property;
+    });
+    //transform the property images
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      properties,
+      "photoUrlsBaseKeys",
+      undefined,
+      1
+    );
     return {
       applications: itemsToReturn,
       hasMore,
@@ -113,8 +129,13 @@ class ApplicationService {
   }
 
   async createApplication(applicationDto: CreateApplicationDto) {
-    const { propertyId, startDate, tenantCognitoId, endDate, paymentProof } =
-      applicationDto;
+    const {
+      propertyId,
+      startDate,
+      tenantCognitoId,
+      endDate,
+      paymentProofsBaseKeys,
+    } = applicationDto;
     const property = await propertyRepository.findUniqueProperty(propertyId);
     if (!property) {
       throw new NotFoundError("Property not found");
@@ -135,11 +156,6 @@ class ApplicationService {
             "These dates overlap with an existing lease or a pending application you've already submitted."
           );
         }
-
-        // const paymentProofUrls = await s3Service.uploadFilesToS3(
-        //   paymentProof,
-        //   `paymentProof/${tenantCognitoId}/${property.id}`
-        // );
         const lease = await leaseRepository.createLeaseWithLocalPrisma(
           localPrisma,
           startDate,
@@ -152,7 +168,7 @@ class ApplicationService {
             localPrisma,
             applicationDto,
             lease.id,
-            []
+            paymentProofsBaseKeys
           );
         return application;
       },

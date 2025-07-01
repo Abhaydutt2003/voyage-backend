@@ -10,7 +10,7 @@ class CreateApplicationDto {
     this.email = body.email;
     this.phoneNumber = body.phoneNumber;
     this.message = body.message;
-    this.paymentProof = files;
+    this.paymentProofsBaseKeys = body.paymentProofsBaseKeys;
   }
 
   applicationDate: string;
@@ -23,7 +23,7 @@ class CreateApplicationDto {
   email: string;
   phoneNumber: string;
   message: string;
-  paymentProof: Express.Multer.File[];
+  paymentProofsBaseKeys: string[];
 }
 
 export default CreateApplicationDto;

@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import {
   createApplication,
@@ -14,20 +13,11 @@ import {
 } from "../middlewares/validation.middleware";
 import { body, param, query } from "express-validator";
 
-const storage = multer.memoryStorage(); //will be held in the server's memory as Buffer objects.
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
-  },
-});
-
 const router = express.Router();
 
 router.post(
   "/",
   authMiddleware(["tenant"]),
-  upload.array("paymentProof"),
   validateBody([
     body("applicationDate")
       .notEmpty()
@@ -61,6 +51,20 @@ router.post(
     body("name").notEmpty().withMessage("name is required"),
     body("email").notEmpty().withMessage("email is required"),
     body("phoneNumber").notEmpty().withMessage("phoneNumber is required"),
+    body("paymentProofsBaseKeys")
+      .isArray()
+      .withMessage("paymentProofsBaseKeys must be an array")
+      .custom((value) => {
+        if (!Array.isArray(value) || value.length < 1) {
+          throw new Error(
+            "paymentProofsBaseKeys must be an array with at least 1 element"
+          );
+        }
+        if (!value.every((item) => typeof item === "string")) {
+          throw new Error("paymentProofsBaseKeys must contain only strings");
+        }
+        return true;
+      }),
   ]),
   createApplication
 );

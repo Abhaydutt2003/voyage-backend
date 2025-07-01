@@ -10,7 +10,7 @@ import { locationRepository } from "../repositories/location.repository";
 import { Location } from "../generated/prisma/client";
 import GetPropertiesDto from "../dtos/property/getProperties.dto";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
-import { s3Service } from "./s3Service";
+import { transformerService } from "./transformer.service";
 
 class PropertyService {
   #getWhereConditionsForProperties(propertyData: GetPropertiesDto) {
@@ -124,7 +124,15 @@ class PropertyService {
       }
     `;
 
-    return await propertyRepository.fetchPropertiesWithSql(completeQuery);
+    //update the base keys to be presigned urls.
+    let properties = await propertyRepository.fetchPropertiesWithSql(
+      completeQuery
+    );
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      properties,
+      "photoUrlsBaseKeys"
+    );
+    return properties;
   }
 
   async getProperty(id: string) {
@@ -148,6 +156,10 @@ class PropertyService {
           },
         },
       };
+      await transformerService.transformBaseKeysToPresignedUrls(
+        propertyWithCoordinates,
+        "photoUrlsBaseKeys"
+      );
       return propertyWithCoordinates;
     } else {
       throw new NotFoundError(`Property not found with id : ${id}`);
@@ -242,8 +254,6 @@ class PropertyService {
   }
 
   async createProperty(propertyData: CreatePropertyDto) {
-    //upload to s3
-    // const photoUrls = await s3Service.uploadFilesToS3(propertyData.files, "properties"); //TODO remove this comment line after making the S3 work
     // create the location obj
     const location = await this.#createLocation(
       propertyData.locationData.address,
@@ -254,7 +264,7 @@ class PropertyService {
     );
     const newProperty = await propertyRepository.createProperty(
       propertyData,
-      [],
+      propertyData.propertyData.photoUrlsBaseKeys,
       location.id
     );
     return newProperty;
@@ -265,6 +275,21 @@ class PropertyService {
       propertyId
     );
     return propertyWithLeases?.leases;
+  }
+
+  async getPropertyLight(propertyId: number) {
+    const property = await propertyRepository.findPropertyByIdLight(propertyId);
+    if (!property) {
+      throw new NotFoundError("Property not found");
+    }
+    
+    await transformerService.transformBaseKeysToPresignedUrls(
+      property,
+      "photoUrlsBaseKeys",
+      1000 * 60 * 60 * 24 * 10,
+      1
+    );
+    return property;
   }
 }
 

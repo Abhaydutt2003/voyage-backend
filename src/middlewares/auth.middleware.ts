@@ -30,20 +30,24 @@ export const authMiddleware = (allowedRoles: string[]) => {
       throw new UnauthorizedError();
     }
 
-    try {
-      const decoded = jwt.decode(token) as DecodedToken;
-      const userRole = decoded["custom:role"] || "";
-      req.user = {
-        id: decoded.sub,
-        role: userRole,
-      };
-      const hasAccess = allowedRoles.includes(userRole.toLowerCase());
-      if (!hasAccess) {
-        throw new ForbiddenError();
-      }
-    } catch (error) {
+    let decoded: DecodedToken;
+
+    decoded = jwt.decode(token) as DecodedToken;
+    if (!decoded || !decoded.sub) {
       throw new ValidationError(["Invalid token"]);
     }
+
+    const userRole = decoded["custom:role"] || "";
+    req.user = {
+      id: decoded.sub,
+      role: userRole,
+    };
+
+    const hasAccess = allowedRoles.includes(userRole.toLowerCase());
+    if (!hasAccess) {
+      throw new ForbiddenError();
+    }
+
     next();
   };
 };

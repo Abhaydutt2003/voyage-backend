@@ -1,4 +1,4 @@
-import { Prisma } from "../generated/prisma/client";
+import { Location, Prisma, Property } from "../generated/prisma/client";
 import { repoErrorHandler } from "../lib/repoErrorHandler";
 import { prisma } from "../lib/prisma";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
@@ -39,8 +39,29 @@ class PropertyRepository {
     );
   }
 
+  async findPropertyByIdLight(id: number) {
+    return repoErrorHandler(() =>
+      prisma.property.findUnique({
+        where: { id },
+        select: {
+          name: true,
+          description: true,
+          pricePerNight: true,
+          photoUrlsBaseKeys: true,
+          location: {
+            select: {
+              state: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      })
+    );
+  }
+
   async fetchPropertiesWithSql(rawSqlQuery: Prisma.Sql) {
-    return repoErrorHandler(() => prisma.$queryRaw(rawSqlQuery));
+    return repoErrorHandler(() => prisma.$queryRaw<Property[]>(rawSqlQuery));
   }
 
   async findPropertyById(id: number) {
@@ -76,14 +97,14 @@ class PropertyRepository {
 
   async createProperty(
     propertyData: CreatePropertyDto,
-    photoUrls: string[],
+    photoUrlsBaseKeys: string[],
     locationId: number
   ) {
     return repoErrorHandler(() =>
       prisma.property.create({
         data: {
           ...propertyData.propertyData,
-          photoUrls: photoUrls,
+          photoUrlsBaseKeys,
           locationId,
         },
         include: {

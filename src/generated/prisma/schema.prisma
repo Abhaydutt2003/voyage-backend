@@ -70,7 +70,7 @@ model Property {
   name              String
   description       String
   pricePerNight     Float
-  photoUrls         String[]
+  photoUrlsBaseKeys String[]
   amenities         Amenity[]
   highlights        Highlight[]
   isPetsAllowed     Boolean      @default(false)
@@ -129,17 +129,17 @@ model Location {
 }
 
 model Application {
-  id              Int               @id @default(autoincrement())
-  applicationDate DateTime
-  status          ApplicationStatus
-  propertyId      Int
-  tenantCognitoId String
-  name            String
-  email           String
-  phoneNumber     String
-  paymentProof    String[]
-  message         String?
-  leaseId         Int?              @unique
+  id                    Int               @id @default(autoincrement())
+  applicationDate       DateTime
+  status                ApplicationStatus
+  propertyId            Int
+  tenantCognitoId       String
+  name                  String
+  email                 String
+  phoneNumber           String
+  paymentProofsBaseKeys String[]
+  message               String?
+  leaseId               Int?              @unique
 
   property Property @relation(fields: [propertyId], references: [id])
   tenant   Tenant   @relation(fields: [tenantCognitoId], references: [cognitoId])

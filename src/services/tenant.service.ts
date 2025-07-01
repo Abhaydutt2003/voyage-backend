@@ -8,6 +8,7 @@ import {
   ConflictError,
   NotFoundError,
 } from "../middlewares/error.middleware";
+import { transformerService } from "./transformer.service";
 
 class TenantService {
   async createTenant(
@@ -68,6 +69,10 @@ class TenantService {
           },
         };
       })
+    );
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      residencesWithFormattedLocation,
+      "photoUrlsBaseKeys"
     );
     return residencesWithFormattedLocation;
   }

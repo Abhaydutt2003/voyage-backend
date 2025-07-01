@@ -6,10 +6,12 @@ import {
   UploadType,
 } from "../lib/filesConfig";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { getSignedUrl as getCloudfrontSignedUrl } from "@aws-sdk/cloudfront-signer";
 import { ApplicationError } from "../middlewares/error.middleware";
 
 class S3Service {
   private s3Client: S3Client;
+  private cloudfrontDistributionDomain: string;
 
   constructor() {
     this.s3Client = new S3Client({
@@ -19,13 +21,18 @@ class S3Service {
         secretAccessKey: config.aws.secretAccessKey,
       },
     });
+    this.cloudfrontDistributionDomain = "https://dxasclf72vqk5.cloudfront.net";
   }
 
   #generateS3Key(uploadType: UploadType, fileName: string): string {
     const folder = UPLOAD_TYPE_TO_FOLDER[uploadType];
-    const timestamp = Date.now();
+    const timestamp = Date.now(); // Keep the timestamp
     const sanitizedFileName = this.#sanitizeFileName(fileName);
-    return `${folder}/${timestamp}/${sanitizedFileName}`;
+    const fileNameParts = sanitizedFileName.split(".");
+    const extension = fileNameParts.pop();
+    const baseName = fileNameParts.join(".");
+    const newFileName = `${baseName}_${timestamp}.${extension}`;
+    return `${folder}/${newFileName}`;
   }
 
   #sanitizeFileName(fileName: string) {
@@ -43,6 +50,15 @@ class S3Service {
     });
   }
 
+  async #generateGetPresignedUrls(baseKey: string, timeToExpire: number) {
+    return getCloudfrontSignedUrl({
+      url: `${this.cloudfrontDistributionDomain}/${baseKey}`,
+      privateKey: process.env.CLOUDFRONT_PRIVATE_KEY!,
+      keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID!,
+      dateLessThan: new Date(Date.now() + timeToExpire),
+    });
+  }
+
   async getPutPresignedUrls(
     filesInformation: FileInformation[],
     uploadType: UploadType
@@ -54,13 +70,31 @@ class S3Service {
         const url = await this.#generatePutPresignedUrl(s3Key, fileType);
         return {
           index,
-          result: { fileName, url },
+          result: { s3Key, url },
         };
       } catch (error) {
-        throw new ApplicationError("Failed yo generate urls.");
+        throw new ApplicationError("Failed to generate urls.");
       }
     });
     return await Promise.all(promises); //use promises.all instead of allSettled
+  }
+
+  async getGetPresignedUrls(
+    fileBaseKeys: string[],
+    timeToExpire = 1000 * 60 * 60
+  ) {
+    const promises = fileBaseKeys.map(async (singleBaseKey) => {
+      try {
+        const url = await this.#generateGetPresignedUrls(
+          singleBaseKey,
+          timeToExpire
+        );
+        return url;
+      } catch (error) {
+        return ""; //will show nothing if unable to make the url.
+      }
+    });
+    return await Promise.all(promises);
   }
 }
 

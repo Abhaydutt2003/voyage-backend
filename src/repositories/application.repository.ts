@@ -40,7 +40,7 @@ class ApplicationRepository {
     localPrisma: TransactionPrismaClient,
     applicationDto: CreateApplicationDto,
     leaseId: number,
-    paymentProofUrls: string[]
+    paymentProofsBaseKeys: string[]
   ) {
     return repoErrorHandler(() =>
       localPrisma.application.create({
@@ -51,7 +51,7 @@ class ApplicationRepository {
           email: applicationDto.email,
           phoneNumber: applicationDto.phoneNumber,
           message: applicationDto.message,
-          paymentProof: paymentProofUrls,
+          paymentProofsBaseKeys,
           property: {
             connect: { id: Number(applicationDto.propertyId) },
           },
