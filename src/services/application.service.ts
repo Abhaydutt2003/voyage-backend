@@ -12,7 +12,7 @@ import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
 import { ApplicationStatus, Prisma } from "../generated/prisma/client";
 import PDFDocument from "pdfkit";
-import { s3Service } from "./s3Service";
+import { transformerService } from "./transformer.service";
 
 interface ApplicationCursor {
   applicationDate: string; //ISO string
@@ -105,6 +105,22 @@ class ApplicationService {
       };
       nextCursor = Buffer.from(JSON.stringify(cursorData)).toString("base64");
     }
+    //tranform the applications payments proofs.
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      applications,
+      "paymentProofsBaseKeys"
+    );
+    //get the property array.
+    const properties = applications.map((singleApplication) => {
+      return singleApplication.property;
+    });
+    //transform the property images
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      properties,
+      "photoUrlsBaseKeys",
+      undefined,
+      1
+    );
     return {
       applications: itemsToReturn,
       hasMore,

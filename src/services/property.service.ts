@@ -1,5 +1,5 @@
 import { wktToGeoJSON } from "@terraformer/wkt";
-import { Prisma, Property } from "../generated/prisma/client";
+import { Prisma } from "../generated/prisma/client";
 import { propertyRepository } from "../repositories/property.repository";
 import {
   NotFoundError,
@@ -10,7 +10,7 @@ import { locationRepository } from "../repositories/location.repository";
 import { Location } from "../generated/prisma/client";
 import GetPropertiesDto from "../dtos/property/getProperties.dto";
 import CreatePropertyDto from "../dtos/property/createPropertyDto";
-import { s3Service } from "./s3Service";
+import { transformerService } from "./transformer.service";
 
 class PropertyService {
   #getWhereConditionsForProperties(propertyData: GetPropertiesDto) {
@@ -128,15 +128,9 @@ class PropertyService {
     let properties = await propertyRepository.fetchPropertiesWithSql(
       completeQuery
     );
-    await Promise.all(
-      properties.map(async (singleProperty) => {
-        const baseKeys = singleProperty.photoUrlsBaseKeys;
-        let presignedUrls: string[] = [];
-        if (baseKeys) {
-          presignedUrls = await s3Service.getGetPresignedUrls(baseKeys);
-        }
-        singleProperty.photoUrlsBaseKeys = presignedUrls;
-      })
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      properties,
+      "photoUrlsBaseKeys"
     );
     return properties;
   }
@@ -162,14 +156,10 @@ class PropertyService {
           },
         },
       };
-
-      //update the base keys with the presigned urls .
-      const baseKeys = propertyWithCoordinates.photoUrlsBaseKeys;
-      let presignedUrls: string[] = [];
-      if (baseKeys) {
-        presignedUrls = await s3Service.getGetPresignedUrls(baseKeys);
-      }
-      propertyWithCoordinates.photoUrlsBaseKeys = presignedUrls;
+      await transformerService.transformBaseKeysToPresignedUrls(
+        propertyWithCoordinates,
+        "photoUrlsBaseKeys"
+      );
       return propertyWithCoordinates;
     } else {
       throw new NotFoundError(`Property not found with id : ${id}`);
@@ -292,17 +282,13 @@ class PropertyService {
     if (!property) {
       throw new NotFoundError("Property not found");
     }
-    let baseKeys = property?.photoUrlsBaseKeys;
-    //only send the first image
-    if (baseKeys) {
-      baseKeys.splice(1);
-      //make sure that this image can be accesed for 10 days.
-      const presignedUrls = await s3Service.getGetPresignedUrls(
-        baseKeys,
-        1000 * 60 * 60 * 24 * 10
-      );
-      baseKeys = presignedUrls;
-    }
+    
+    await transformerService.transformBaseKeysToPresignedUrls(
+      property,
+      "photoUrlsBaseKeys",
+      1000 * 60 * 60 * 24 * 10,
+      1
+    );
     return property;
   }
 }

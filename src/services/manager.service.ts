@@ -4,6 +4,9 @@ import { propertyRepository } from "../repositories/property.repository";
 import { Prisma } from "../generated/prisma/client";
 import { locationRepository } from "../repositories/location.repository";
 import { wktToGeoJSON } from "@terraformer/wkt";
+import { promiseHooks } from "v8";
+import { s3Service } from "./s3Service";
+import { transformerService } from "./transformer.service";
 
 class ManagerService {
   async createManager(
@@ -64,6 +67,10 @@ class ManagerService {
           },
         };
       })
+    );
+    await transformerService.transformArrayBaseKeysToPresignedUrls(
+      propertiesWithFormattedLocation,
+      "photoUrlsBaseKeys"
     );
     return propertiesWithFormattedLocation;
   }

@@ -83,7 +83,7 @@ class S3Service {
     fileBaseKeys: string[],
     timeToExpire = 1000 * 60 * 60
   ) {
-    const promises = fileBaseKeys.map(async (singleBaseKey, index) => {
+    const promises = fileBaseKeys.map(async (singleBaseKey) => {
       try {
         const url = await this.#generateGetPresignedUrls(
           singleBaseKey,

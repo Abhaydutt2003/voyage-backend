@@ -51,6 +51,8 @@ class PropertyRepository {
           location: {
             select: {
               state: true,
+              city: true,
+              country: true,
             },
           },
         },
