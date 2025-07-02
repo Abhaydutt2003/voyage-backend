@@ -6,16 +6,27 @@ import * as runtime from "../generated/prisma/runtime/library";
 type TransactionPrismaClient = Omit<PrismaClient, runtime.ITXClientDenyList>;
 
 class LeaseRepository {
-  async checkLeaseReviewAdded(
-    localPrisma: TransactionPrismaClient,
-    leaseId: number
-  ) {
+  async checkLeaseReviewAdded(leaseId: number) {
     return repoErrorHandler(() =>
-      localPrisma.lease.findFirst({
+      prisma.lease.findFirst({
         where: {
           id: leaseId,
         },
         select: {
+          reviewAdded: true,
+        },
+      })
+    );
+  }
+
+  async markLeaseReviewed(
+    localPrisma: TransactionPrismaClient,
+    leaseId: number
+  ) {
+    return repoErrorHandler(() =>
+      localPrisma.lease.update({
+        where: { id: leaseId },
+        data: {
           reviewAdded: true,
         },
       })

@@ -25,24 +25,26 @@ class ApplicationService {
     userId: string | undefined,
     userType: string | undefined,
     limit: number,
-    afterCursor?: string
+    afterCursor?: string,
+    propertyId?: string
   ) {
-    let whereClause: Prisma.ApplicationWhereInput = {
-      status: status as ApplicationStatus,
-    };
-
-    if (userType === "tenant") {
-      whereClause = { ...whereClause, tenantCognitoId: String(userId) };
-    } else if (userType === "manager") {
-      whereClause = {
-        ...whereClause,
-        property: {
-          managerCognitoId: String(userId),
-        },
-      };
-    } else if (userType !== undefined) {
+    if (
+      userType !== undefined &&
+      userType !== "tenant" &&
+      userType !== "manager"
+    ) {
       throw new UnprocessableEntityError(`userType ${userType} does not exist`);
     }
+
+    let whereClause: Prisma.ApplicationWhereInput = {
+      status: status as ApplicationStatus,
+      ...(propertyId ? { propertyId: Number(propertyId) } : {}),
+      ...(userType === "tenant"
+        ? { tenantCognitoId: String(userId) }
+        : userType === "manager"
+        ? { property: { managerCognitoId: String(userId) } }
+        : {}),
+    };
 
     const orderBy: Prisma.ApplicationOrderByWithRelationInput[] = [
       { applicationDate: "desc" },
@@ -266,7 +268,6 @@ class ApplicationService {
     doc.moveDown();
 
     doc.fontSize(16).text("Application Details:");
-    doc.fontSize(12).text(`Application ID: ${application.id}`);
     doc.text(`Application Date: ${application.applicationDate.toDateString()}`);
     doc.text(`Status: ${application.status}`);
     doc.moveDown();
