@@ -19,5 +19,6 @@ export const reviewLeaseProperty = asyncHandler(
       parseInt(propertyId),
       parseInt(reviewRating)
     );
+    res.json("Review added successfully");
   }
 );

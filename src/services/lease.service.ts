@@ -9,33 +9,39 @@ class LeaseService {
     propertyId: number,
     reviewRating: number
   ) {
-    await prisma.$transaction(async (localPrisma) => {
-      const lease = await leaseRepository.checkLeaseReviewAdded(
-        localPrisma,
-        leaseId
-      );
-      if (!lease) {
-        throw new NotFoundError("Lease not found");
+    //can be outside the transcation as this result is not affected by others.
+    const lease = await leaseRepository.checkLeaseReviewAdded(leaseId);
+    if (!lease) {
+      throw new NotFoundError("Lease not found");
+    }
+    await prisma.$transaction(
+      async (localPrisma) => {
+        const property = await propertyRepository.getPropertyReviewData(
+          localPrisma,
+          propertyId
+        );
+        if (!property) {
+          throw new NotFoundError("Property not found");
+        }
+        const currentTotal =
+          (property.averageRating || 0) * (property.numberOfReviews || 0);
+        const newTotal = currentTotal + reviewRating;
+        const newNumberOfReviews = (property.numberOfReviews || 0) + 1;
+        const newAverageRating = newTotal / newNumberOfReviews;
+        await propertyRepository.addReview(
+          localPrisma,
+          propertyId,
+          newAverageRating,
+          newNumberOfReviews
+        );
+        // mark the lease to be reviwed
+        //inside the isolation because if marking lease fails, the user can give review again
+        await leaseRepository.markLeaseReviewed(localPrisma, leaseId);
+      },
+      {
+        isolationLevel: "Serializable", //crucial to handle race conditons.
       }
-      const property = await propertyRepository.getPropertyReviewData(
-        localPrisma,
-        propertyId
-      );
-      if (!property) {
-        throw new NotFoundError("Property not found");
-      }
-      const currentTotal =
-        (property.averageRating || 0) * (property.numberOfReviews || 0);
-      const newTotal = currentTotal + reviewRating;
-      const newNumberOfReviews = (property.numberOfReviews || 0) + 1;
-      const newAverageRating = newTotal / newNumberOfReviews;
-      await propertyRepository.addReview(
-        localPrisma,
-        propertyId,
-        newAverageRating,
-        newNumberOfReviews
-      );
-    });
+    );
   }
 
   async getAccpetedLeasesTimes(propertyId: number) {
