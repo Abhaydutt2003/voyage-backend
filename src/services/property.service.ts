@@ -166,85 +166,20 @@ class PropertyService {
     }
   }
 
-  async #getGeoCodingResponse(
-    address: any,
-    city: any,
-    country: any,
-    postalCode: any
-  ) {
-    const requestHeaders = {
-      "User-Agent": "VoyageApp (justsomedummyemail@gmail.com)",
-    };
-
-    const searchStrategies = [
-      // Most specific: with street address
-      {
-        street: address,
-        city,
-        country,
-        postalcode: postalCode,
-        format: "json",
-        limit: "1",
-      },
-      // Fallback: without street address(happens when nominatim cannot recognize the street address)
-      {
-        city,
-        country,
-        postalcode: postalCode,
-        format: "json",
-        limit: "1",
-      },
-    ];
-
-    // Helper function to make geocoding request
-    const makeGeocodingRequest = async (params: Record<string, any>) => {
-      const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
-        params
-      ).toString()}`;
-      return await axios.get(url, { headers: requestHeaders });
-    };
-
-    // Try each strategy
-    for (const strategy of searchStrategies) {
-      try {
-        const response = await makeGeocodingRequest(strategy);
-
-        if (response.data && response.data.length > 0) {
-          return response;
-        }
-      } catch (error) {}
-    }
-
-    // If all strategies fail, throw error
-    throw new UnprocessableEntityError(
-      "Cannot get the coordinates for the provided address"
-    );
-  }
-
   async #createLocation(
     address: any,
     city: any,
     state: any,
     country: any,
-    postalCode: any
+    postalCode: any,
+    longitude: any,
+    latitude: any
   ): Promise<Location> {
-    const geocodingResponse = await this.#getGeoCodingResponse(
-      address,
-      city,
-      country,
-      postalCode
-    );
-    //get the longitude, latitude from the response
-    const [longitude, latitude] =
-      geocodingResponse.data[0]?.lon && geocodingResponse.data[0]?.lat
-        ? [
-            parseFloat(geocodingResponse.data[0]?.lon),
-            parseFloat(geocodingResponse.data[0]?.lat),
-          ]
-        : [0, 0];
     const locationRawQuery = Prisma.sql`
       INSERT INTO "Location" (address, city, state, country, "postalCode", coordinates)
-      VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326))
+      VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${parseFloat(
+      longitude
+    )}, ${parseFloat(latitude)}), 4326))
       RETURNING id, address, city, state, country, "postalCode", ST_AsText(coordinates) as coordinates;      
       `;
     const [location] = await locationRepository.createLocation(
@@ -260,7 +195,9 @@ class PropertyService {
       propertyData.locationData.city,
       propertyData.locationData.state,
       propertyData.locationData.country,
-      propertyData.locationData.postalCode
+      propertyData.locationData.postalCode,
+      propertyData.locationData.longitude,
+      propertyData.locationData.latitude
     );
     const newProperty = await propertyRepository.createProperty(
       propertyData,
@@ -282,7 +219,7 @@ class PropertyService {
     if (!property) {
       throw new NotFoundError("Property not found");
     }
-    
+
     await transformerService.transformBaseKeysToPresignedUrls(
       property,
       "photoUrlsBaseKeys",

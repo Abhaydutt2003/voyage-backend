@@ -28,6 +28,8 @@ class CreatePropertyDto {
     state: string;
     country: string;
     postalCode: string;
+    longitude: string;
+    latitude: string;
   };
 
   constructor(files: Express.Multer.File[], body: any) {
@@ -54,6 +56,8 @@ class CreatePropertyDto {
       state: body.state,
       country: body.country,
       postalCode: body.postalCode,
+      longitude: body.longitude,
+      latitude: body.latitude,
     };
   }
 }
