@@ -11,7 +11,7 @@ import { leaseRepository } from "../repositories/lease.repository";
 import { propertyRepository } from "../repositories/property.repository";
 import { prisma } from "../lib/prisma";
 import { ApplicationStatus, Prisma } from "../generated/prisma/client";
-import PDFDocument from "pdfkit";
+import PDFDocument from "pdfkit-table";
 import { transformerService } from "./transformer.service";
 
 interface ApplicationCursor {
@@ -308,6 +308,115 @@ class ApplicationService {
     doc.end();
 
     // Wait for the PDF to be fully generated
+    return pdfPromise;
+  }
+
+  #makeHeader = (label: string, property: string, width: number) => ({
+    label,
+    property,
+    width,
+    renderer: undefined,
+    headerColor: "#CCCCCC",
+    headerOpacity: 0.5,
+    headerAlign: "center",
+    align: "center",
+  });
+
+  async downloadPropertyAgreements(
+    propertyId: number,
+    userId: string
+  ): Promise<Buffer> {
+    let whereClause: Prisma.ApplicationWhereInput = {
+      status: "Approved",
+      propertyId,
+    };
+
+    const orderBy: Prisma.ApplicationOrderByWithRelationInput[] = [
+      { applicationDate: "desc" },
+      { id: "desc" },
+    ];
+
+    const applications = await applicationRepository.findManyWithWhereClause(
+      whereClause,
+      orderBy
+    );
+
+    const property = await propertyRepository.findPropertyByIdLight(
+      propertyId,
+      userId
+    );
+    if (!property) throw new NotFoundError("Property not found");
+
+    const doc = new PDFDocument({ margin: 50 });
+    const chunks: Buffer[] = [];
+
+    doc.on("data", (chunk) => chunks.push(chunk));
+
+    const pdfPromise = new Promise<Buffer>((resolve, reject) => {
+      doc.on("end", () => {
+        const pdfBuffer = Buffer.concat(chunks);
+        resolve(pdfBuffer);
+      });
+      doc.on("error", reject);
+    });
+
+    doc.fontSize(28).text("Property Overview", { align: "center" });
+    doc.moveDown(1.5);
+
+    // --- Property Details ---
+    doc.fontSize(18).text("Property Details:", { underline: true });
+    doc.moveDown(0.5);
+    doc.fontSize(14).text(`Name: ${property.name}`);
+    doc.text(
+      `Address: ${property.location.city}, ${property.location.state}, ${property.location.country}`
+    );
+    doc.text(`Price per Night: $${property.pricePerNight.toFixed(2)}`);
+    doc.moveDown(2);
+
+    // --- Approved Applications Table ---
+    doc.fontSize(20).text("Approved Applications", { underline: true });
+    doc.moveDown(0.5);
+
+    if (applications.length === 0) {
+      doc
+        .fontSize(12)
+        .text("No approved applications found for this property.");
+    } else {
+      const tableData = {
+        headers: [
+          this.#makeHeader("Name", "name", 90),
+          this.#makeHeader("Email", "email", 120),
+          this.#makeHeader("Phone", "phone", 80),
+          this.#makeHeader("Lease Start", "leaseStart", 80),
+          this.#makeHeader("Lease End", "leaseEnd", 80),
+          this.#makeHeader("Application Date", "applicationDate", 100),
+        ],
+        rows: applications.map((app) => [
+          app.name,
+          app.email,
+          app.phoneNumber,
+          app.lease?.startDate.toDateString() ?? "-",
+          app.lease?.endDate.toDateString() ?? "-",
+          app.applicationDate.toDateString(),
+        ]),
+      };
+
+      const tableOptions = {
+        width: 500,
+        defaultStyle: {
+          fontSize: 10,
+          padding: 5,
+          border: true,
+          borderColor: "#AAAAAA",
+          align: "center",
+        },
+        headerRows: 1,
+      };
+
+      await doc.table(tableData, tableOptions);
+    }
+
+    doc.end();
     return pdfPromise;
   }
 }

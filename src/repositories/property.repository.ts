@@ -39,10 +39,10 @@ class PropertyRepository {
     );
   }
 
-  async findPropertyByIdLight(id: number) {
+  async findPropertyByIdLight(id: number, managerCognitoId?: string) {
     return repoErrorHandler(() =>
       prisma.property.findUnique({
-        where: { id },
+        where: { id, ...(managerCognitoId && { managerCognitoId }) },
         select: {
           name: true,
           description: true,

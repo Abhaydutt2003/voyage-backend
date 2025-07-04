@@ -56,7 +56,24 @@ export const downloadAgreement = asyncHandler(
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=agreement-${id}.pdf`
+      `attachment: filename=agreement-${id}.pdf`
+    );
+    res.send(pdfBuffer);
+  }
+);
+
+export const downloadPropertyAgreements = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { propertyId } = req.query;
+    const { user } = req;
+    const pdfBuffer = await applicationService.downloadPropertyAgreements(
+      Number(propertyId),
+      user!.id
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment: filename=property-${propertyId}-Agreements.pdf`
     );
     res.send(pdfBuffer);
   }
