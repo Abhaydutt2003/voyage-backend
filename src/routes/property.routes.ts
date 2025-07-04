@@ -107,6 +107,8 @@ router.post(
     body("state").notEmpty().withMessage("State is required"),
     body("country").notEmpty().withMessage("Country is required"),
     body("postalCode").notEmpty().withMessage("Postal code is required"),
+    body("longitude").notEmpty().withMessage("longitude is required"),
+    body("latitude").notEmpty().withMessage("latitude is required"),
   ]),
   createProperty
 );
