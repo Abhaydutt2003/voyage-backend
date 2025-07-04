@@ -5,6 +5,7 @@ import {
   updateApplicationStatus,
   listApplications,
   downloadAgreement,
+  downloadPropertyAgreements,
 } from "../controllers/application.controller";
 import {
   validateBody,
@@ -97,6 +98,15 @@ router.get(
     param("id").notEmpty().withMessage("id (applicationId) is required"),
   ]),
   downloadAgreement
+);
+
+router.get(
+  "/agreements",
+  authMiddleware(["manager"]),
+  validateQuery([
+    query("propertyId").notEmpty().withMessage("propertyId is required"),
+  ]),
+  downloadPropertyAgreements
 );
 
 export default router;

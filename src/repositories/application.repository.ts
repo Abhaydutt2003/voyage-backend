@@ -14,13 +14,13 @@ class ApplicationRepository {
   async findManyWithWhereClause(
     whereClause: any,
     orderBy: Prisma.ApplicationOrderByWithRelationInput[],
-    take: number,
+    take?: number,
     cursor?: Prisma.ApplicationWhereUniqueInput
   ) {
     return repoErrorHandler(() =>
       prisma.application.findMany({
         where: whereClause,
-        take,
+        ...(take && { take }),
         skip: cursor ? 1 : undefined,
         orderBy,
         include: {
