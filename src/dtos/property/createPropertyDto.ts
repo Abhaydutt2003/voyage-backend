@@ -32,7 +32,7 @@ class CreatePropertyDto {
     latitude: string;
   };
 
-  constructor(files: Express.Multer.File[], body: any) {
+  constructor(body: any) {
     this.propertyData = {
       name: body.name,
       description: body.description,
@@ -41,8 +41,8 @@ class CreatePropertyDto {
         typeof body.amenities === "string" ? JSON.parse(body.amenities) : [],
       highlights:
         typeof body.highlights === "string" ? JSON.parse(body.highlights) : [],
-      isPetsAllowed: body.isPetsAllowed === "true",
-      isParkingIncluded: body.isParkingIncluded === "true",
+      isPetsAllowed: body.isPetsAllowed === true,
+      isParkingIncluded: body.isParkingIncluded === true,
       beds: parseInt(body.beds),
       baths: parseFloat(body.baths),
       squareFeet: parseInt(body.squareFeet),

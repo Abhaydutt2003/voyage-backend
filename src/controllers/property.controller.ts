@@ -30,10 +30,7 @@ export const getProperty = asyncHandler(
 
 export const createProperty = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const propertyData = new CreatePropertyDto(
-      req.files as Express.Multer.File[],
-      req.body
-    );
+    const propertyData = new CreatePropertyDto(req.body);
     const newProperty = await propertyService.createProperty(propertyData);
     res.json(newProperty);
   }
