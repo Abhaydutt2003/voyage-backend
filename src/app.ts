@@ -10,19 +10,27 @@ import leaseRoutes from "./routes/lease.routes";
 import filesRoutes from "./routes/files.routes";
 import applicationRoutes from "./routes/application.routes";
 import propertyRoutes from "./routes/property.routes";
+import {
+  rateLimiter,
+  concurrencyLimiter,
+} from "./middlewares/limiters.middleware";
 
 const app = express();
 app.use(express.json());
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
 app.use(cors());
+app.use(morgan("common"));
+app.use(express.urlencoded({ extended: false }));
+app.use(rateLimiter);
+app.use(concurrencyLimiter);
 
 /* ROUTES */
-app.get("/", (req, res) => {
-  res.send("This is home route.");
+app.get("/health", (req, res) => {
+  res.send("OK");
 });
 
 app.use("/applications", applicationRoutes);
