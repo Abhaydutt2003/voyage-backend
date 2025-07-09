@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "voyage-backend",
       script: "npm",
-      args: "run dev",
+      args: "run start",
       instances: 1,
       max_memory_restart: "400M",
       node_args: "--max-old-space-size=350",
