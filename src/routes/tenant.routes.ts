@@ -42,7 +42,7 @@ router.put(
 );
 
 router.get(
-  "/:cognitoId/current-residences",
+  "/:cognitoId/residences/current",
   validateParams([
     param("cognitoId").notEmpty().withMessage("cognitoId is required"),
   ]),

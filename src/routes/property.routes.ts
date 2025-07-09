@@ -6,6 +6,8 @@ import {
   getProperty,
   getPropertyLeases,
   getPropertyLight,
+  getLeasesTimes,
+  reviewLeaseProperty,
 } from "../controllers/property.controller";
 import {
   validateBody,
@@ -111,6 +113,32 @@ router.post(
     body("latitude").notEmpty().withMessage("latitude is required"),
   ]),
   createProperty
+);
+
+router.get(
+  "/:propertyId/leases",
+  authMiddleware(["manager", "tenant"]),
+  validateParams([
+    param("propertyId").notEmpty().withMessage("propertyId is required"),
+  ]),
+  getLeasesTimes
+);
+
+router.post(
+  "/:propertyId/:leaseId/reviews",
+  authMiddleware(["tenant"]),
+  validateBody([
+    body("reviewRating")
+      .notEmpty()
+      .withMessage("reviewRating is required")
+      .isInt({ min: 1, max: 5 })
+      .withMessage("reviewRating must be an integer between 1 and 5"),
+  ]),
+  validateParams([
+    param("propertyId").notEmpty().withMessage("propertyId is required"),
+    param("leaseId").notEmpty().withMessage("leaseId is required"),
+  ]),
+  reviewLeaseProperty
 );
 
 export default router;

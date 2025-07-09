@@ -45,3 +45,30 @@ export const getPropertyLeases = asyncHandler(
     res.json(propertyWithLeases);
   }
 );
+
+export const getLeasesTimes = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const status = req.query.status;
+    if (!status || status !== "accepted") {
+      //currently handles only accepted leases.
+      res.json([]);
+      return;
+    }
+    const acceptedleaseTimes = await propertyService.getAccpetedLeasesTimes(
+      Number(req.query.propertyId)
+    );
+    res.json(acceptedleaseTimes);
+  }
+);
+
+export const reviewLeaseProperty = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { leaseId, propertyId, reviewRating } = req.body;
+    await propertyService.reviewLeaseProperty(
+      parseInt(leaseId),
+      parseInt(propertyId),
+      parseInt(reviewRating)
+    );
+    res.json("Review added successfully");
+  }
+);
