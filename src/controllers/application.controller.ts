@@ -47,16 +47,16 @@ export const updateApplicationStatus = asyncHandler(
 export const downloadAgreement = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const { userCognitoId, userType } = req.query;
+    const { user } = req;
     const pdfBuffer = await applicationService.downloadAgreement(
       Number(id),
-      userCognitoId as string,
-      userType as "tenant" | "manager"
+      user?.id as string,
+      user?.role as "tenant" | "manager"
     );
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment: filename=agreement-${id}.pdf`
+      `attachment; filename=agreement-${id}.pdf`
     );
     res.send(pdfBuffer);
   }
@@ -64,7 +64,7 @@ export const downloadAgreement = asyncHandler(
 
 export const downloadPropertyAgreements = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { propertyId } = req.query;
+    const { propertyId } = req.params;
     const { user } = req;
     const pdfBuffer = await applicationService.downloadPropertyAgreements(
       Number(propertyId),
@@ -73,7 +73,7 @@ export const downloadPropertyAgreements = asyncHandler(
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment: filename=property-${propertyId}-Agreements.pdf`
+      `attachment; filename=property-${propertyId}-Agreements.pdf`
     );
     res.send(pdfBuffer);
   }

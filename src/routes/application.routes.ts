@@ -90,10 +90,6 @@ router.get(
 router.get(
   "/:id/agreement",
   authMiddleware(["tenant", "manager"]),
-  validateQuery([
-    query("userCognitoId").notEmpty().withMessage("userCognitoId is required"),
-    query("userType").notEmpty().withMessage("userType is required"),
-  ]),
   validateParams([
     param("id").notEmpty().withMessage("id (applicationId) is required"),
   ]),
@@ -101,10 +97,10 @@ router.get(
 );
 
 router.get(
-  "/agreements",
+  "/:propertyId/agreements",
   authMiddleware(["manager"]),
-  validateQuery([
-    query("propertyId").notEmpty().withMessage("propertyId is required"),
+  validateParams([
+    param("propertyId").notEmpty().withMessage("propertyId is required"),
   ]),
   downloadPropertyAgreements
 );

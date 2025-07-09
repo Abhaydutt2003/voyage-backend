@@ -1,7 +1,10 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.middleware";
-import { validateBody } from "../middlewares/validation.middleware";
-import { body, CustomValidator } from "express-validator";
+import {
+  validateBody,
+  validateParams,
+} from "../middlewares/validation.middleware";
+import { body, CustomValidator, param } from "express-validator";
 import { ValidationError } from "../middlewares/error.middleware";
 import { getPresignedPutUrls } from "../controllers/files.controller";
 import { ALLOWED_MIME_TYPES, config, UPLOAD_TYPES } from "../lib/filesConfig";
@@ -27,7 +30,7 @@ const isValidUploadType: CustomValidator = (value: string) => {
 const router = express.Router();
 
 router.post(
-  "/files-upload/presigned-put-urls",
+  "/uploads/:uploadType/presigned-urls",
   authMiddleware(["manager", "tenant"]),
   validateBody([
     body("filesInformation")
@@ -51,8 +54,9 @@ router.post(
       .notEmpty()
       .withMessage("File type cannot be empty.")
       .custom(isValidMimeType),
-
-    body("uploadType")
+  ]),
+  validateParams([
+    param("uploadType")
       .isString()
       .notEmpty()
       .withMessage("uploadType is required.")

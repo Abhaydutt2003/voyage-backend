@@ -6,7 +6,6 @@ import { authMiddleware } from "./middlewares/auth.middleware";
 import tenantRoutes from "./routes/tenant.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import managerRoutes from "./routes/manager.routes";
-import leaseRoutes from "./routes/lease.routes";
 import filesRoutes from "./routes/files.routes";
 import applicationRoutes from "./routes/application.routes";
 import propertyRoutes from "./routes/property.routes";
@@ -37,7 +36,6 @@ app.use("/applications", applicationRoutes);
 app.use("/properties", propertyRoutes);
 app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
 app.use("/managers", authMiddleware(["manager"]), managerRoutes);
-app.use("/leases", leaseRoutes);
 app.use("/files", filesRoutes);
 app.use(errorHandler);
 
