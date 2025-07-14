@@ -117,6 +117,7 @@ router.post(
 
 router.get(
   "/:propertyId/leases/times",
+  authMiddleware(["manager", "tenant"]),
   validateParams([
     param("propertyId").notEmpty().withMessage("propertyId is required"),
   ]),
